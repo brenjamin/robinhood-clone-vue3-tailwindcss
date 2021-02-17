@@ -1,18 +1,39 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Navbar :logo="logo" :links="links" />
+  <div>
+    <p>Home</p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import Navbar from '@/components/Navbar'
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    Navbar
+  },
+  setup() {
+    const logo = {
+      src: 'assets/robinhood-logo.svg',
+      alt: 'Robinhood Logo',
+      route: 'Home'
+    }
+
+    const links = [
+      {
+        top: {
+          name: 'Products',
+          link: ''
+        },
+        sub: [
+          {
+            name: ''
+          }
+        ]
+      }
+    ]
+
+    return { logo, links }
   }
 }
 </script>

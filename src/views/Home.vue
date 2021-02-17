@@ -1,12 +1,11 @@
 <template>
   <Navbar :logo="logo" :links="links" />
-  <div>
-    <p>Home</p>
-  </div>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar'
+import getLinks from '@/composables/getLinks'
+
 export default {
   name: 'Home',
   components: {
@@ -19,19 +18,7 @@ export default {
       route: 'Home'
     }
 
-    const links = [
-      {
-        top: {
-          name: 'Products',
-          link: ''
-        },
-        sub: [
-          {
-            name: ''
-          }
-        ]
-      }
-    ]
+    const links  = getLinks()
 
     return { logo, links }
   }

@@ -1,10 +1,9 @@
 <template>
-  <Navbar :logo="logo" :links="links" />
+  <Navbar :logo="logo"/>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar'
-import getLinks from '@/composables/getLinks'
 
 export default {
   name: 'Home',
@@ -18,9 +17,7 @@ export default {
       route: 'Home'
     }
 
-    const links  = getLinks()
-
-    return { logo, links }
+    return { logo }
   }
 }
 </script>

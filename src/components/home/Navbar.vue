@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex justify-between items-center px-8 md:px-6 h-16 bg-white fixed inset-x-0 top-0" :class="{ 'shadow-md': !mobileMenuIsActive }">
+  <nav class="flex justify-between items-center px-8 md:px-6 h-16 bg-white fixed inset-x-0 top-0 z-40" :class="{ 'shadow-md': !mobileMenuIsActive }">
     <div class="flex items-center">
       <router-link :to="{ name: logo.route }">
         <img :src="require('@/' + logo.src)" :alt="logo.alt" class="w-36"/>
@@ -79,9 +79,9 @@ import getLinks from '@/composables/getLinks'
 
 export default {
   name: "Navbar",
-  props: ["logo"],
+  props: ['logo'],
   setup() {
-    // position submenu
+    // position desktop submenus
     onMounted(() => {
       const rect = document.getElementById('primary-navigation-desktop').getBoundingClientRect()
       document.getElementsByClassName('submenu-desktop').forEach(element => {

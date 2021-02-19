@@ -20,7 +20,10 @@ module.exports = {
         '5.5xl': '3.25rem'
       },
       spacing: {
+        '7.5': '1.875rem',
         '12.5': '3.125rem',
+        '15': '3.75rem',
+        '18': '4.5rem',
         '25': '6.25rem'
       },
       lineHeight: {

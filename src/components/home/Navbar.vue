@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex justify-between items-center px-8 md:px-6 h-16 bg-white relative" :class="{ 'shadow-md': !mobileMenuIsActive }">
+  <nav class="flex justify-between items-center px-8 md:px-6 h-16 bg-white fixed inset-x-0 top-0" :class="{ 'shadow-md': !mobileMenuIsActive }">
     <div class="flex items-center">
       <router-link :to="{ name: logo.route }">
         <img :src="require('@/' + logo.src)" :alt="logo.alt" class="w-36"/>
@@ -18,7 +18,7 @@
               {{link.top.name }}
             </router-link>
           </div>
-          <div v-show="link.submenu.length && link.top.active" class="absolute top-full inset-x-0">
+          <div v-show="link.submenu.length && link.top.active" class="absolute top-full inset-x-0 bg-white top-inner-shadow">
             <ul class="submenu-desktop h-16 flex items-center relative pl-12">
               <li v-for="(sublink, index) in link.submenu" :key="index" class="ml-9 first:ml-0 flex items-center" :class="[ sublink.offset ? ['text-magenta', 'hover:text-dark-magenta', 'border-before', 'pl-9'] : ['hover:text-green'] ]">
                 <router-link :to="{name: sublink.route}">
@@ -34,7 +34,7 @@
       <router-link :to="{ name: 'Login' }" class="font-bold hover:text-green">
         Log In
       </router-link>
-      <router-link :to="{ name: 'SignUp' }" class="font-bold bg-light-green hover:bg-green rounded-full ml-8 px-10 h-12 flex items-center justify-center">
+      <router-link :to="{ name: 'SignUp' }" class="button button-green ml-8">
         Sign Up
       </router-link>
     </div>
@@ -43,7 +43,7 @@
       <div class="bg-black origin-center transition-all duration-300" :class="{ active: mobileMenuIsActive }"></div>
       <div class="bg-black origin-center transition-all duration-300" :class="{ active: mobileMenuIsActive }"></div>
     </button>
-    <div v-show="mobileMenuIsActive" class="fixed inset-x-0 bottom-0 top-16 text-base-sm md:text-lg p-7 lg:hidden overflow-y-scroll">
+    <div v-show="mobileMenuIsActive" class="fixed inset-x-0 bottom-0 top-16 text-base-sm md:text-lg p-7 lg:hidden overflow-y-scroll bg-white">
       <ul>
         <li v-for="(link, index) in links" :key="index" class="mt-5">
           <div v-if="link.submenu.length">
@@ -70,6 +70,7 @@
       </ul>
     </div>
   </nav>
+  <div class="h-16"></div>
 </template>
 
 <script>
@@ -150,5 +151,9 @@ export default {
   .border-before::before {
       content: '';
       @apply absolute w-px h-5 bg-black left-0 top-1/2 transform -translate-y-1/2;
+  }
+
+  .top-inner-shadow {
+    box-shadow: inset 0 5px 6px -5px rgba(0,0,0,0.25);
   }
 </style>

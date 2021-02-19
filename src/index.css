@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Typography */
+h1 {
+    @apply text-2.5xl font-medium tracking-tight-lg leading-tighter;
+}
+@screen md {
+    h1 {
+        @apply text-5.5xl;
+    }
+}   
+
+
+/* Buttons */
+.button {
+    @apply font-bold rounded-full px-10 h-12 inline-flex items-center justify-center;
+}
+
+.button-green {
+    @apply bg-light-green;
+}
+.button-green:hover {
+    @apply bg-green;
+}
+
+.button-black {
+    @apply text-white bg-black;
+}
+
+.button-black:hover {
+    @apply bg-dark-gray;
+}

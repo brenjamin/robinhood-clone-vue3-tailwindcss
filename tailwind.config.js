@@ -11,7 +11,8 @@ module.exports = {
         'dark-magenta': 'rgb(196, 56, 96)',
         'light-gray': 'rgb(245,248,250)',
         'border-gray': 'rgb(227,233,237)',
-        'dark-gray': 'rgb(42,49,55)'
+        'dark-gray': 'rgb(42,49,55)',
+        'text-gray': 'rgb(111,120,126)'
       },
       fontSize: {
         'base-sm': '.9375rem',
@@ -24,13 +25,18 @@ module.exports = {
         '12.5': '3.125rem',
         '15': '3.75rem',
         '18': '4.5rem',
-        '25': '6.25rem'
+        '25': '6.25rem',
+        '75': '18.75rem'
       },
       lineHeight: {
         'tighter': '1.15'
       },
       letterSpacing: {
         'tight-lg': '-.035em'
+      },
+      borderWidth: {
+        '6': '6px',
+        '10': '10px'
       }
     },
   },
@@ -39,5 +45,10 @@ module.exports = {
       margin: ['responsive', 'first']
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
+  corePlugins: {
+   container: false,
+  }
 }

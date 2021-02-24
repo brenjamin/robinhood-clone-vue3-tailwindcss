@@ -5,8 +5,17 @@
 <style lang="postcss">
 #app, button, a {
   font-family: 'Capsule Sans Text', Helvetica, Arial, sans-serif;
-  letter-spacing: -0.25px;
-  @apply text-lg text-black;
+  letter-spacing: -0.1px;
+  @apply text-base-sm text-black;
+}
+
+@screen md {
+  button, a, p {
+    letter-spacing: -0.25px;
+  }
+  #app, button, a {
+    @apply text-lg;
+  }
 }
 
 @font-face {

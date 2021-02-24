@@ -1,6 +1,6 @@
 <template>
   <section :class="[bgColor, color]">
-      <div class="max-w-screen-xl mx-auto lg:flex lg:items-center px-6 md:px-8 lg:px-9 pb-9 md:pb-18 lg:pb-0">
+      <div class="container lg:flex lg:items-center pb-9 md:pb-18 lg:pb-0">
           <div class="py-12.5 lg:py-25 lg:w-2/5 lg:mr-2 flex flex-col">
                 <slot name="header"></slot>
                 <slot name="description"></slot>

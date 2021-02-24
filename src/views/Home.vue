@@ -13,16 +13,26 @@
       </div>
     </template>
   </HeroWithVideo>
+  <VideoCTA :embed="videoCTA.embed" :video="videoCTA.video">
+    <template v-slot:callout>
+      <p class="text-center font-medium">See our <span class="underline">fee schedule</span> to learn more about cost.</p>
+    </template>
+    <template v-slot:headline>
+      <h2 class="h1">We are all investors.</h2>
+    </template>
+  </VideoCTA>
 </template>
 
 <script>
 import Navbar from '@/components/home/Navbar'
 import HeroWithVideo from '@/components/home/HeroWithVideo'
+import VideoCTA from '@/components/home/VideoCTA'
 export default {
   name: 'Home',
   components: {
     Navbar,
-    HeroWithVideo
+    HeroWithVideo,
+    VideoCTA
   },
   setup() {
     const logo = {
@@ -52,7 +62,15 @@ export default {
       }
     }
 
-    return { logo, hero }
+    const videoCTA = {
+      embed: 'https://www.youtube.com/embed/6dd8cZfSIK0',
+      video: {
+          src: 'assets/video/superbowl-ad.mp4',
+          type: 'mp4'
+        }
+      }
+
+    return { logo, hero, videoCTA }
   }
 }
 </script>

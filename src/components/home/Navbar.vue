@@ -107,7 +107,7 @@ export default {
       links.value.forEach(item => {
           item.top.active = false
       })
-      if(mobileMenuIsActive) {
+      if(mobileMenuIsActive.value) {
         document.documentElement.style.overflow = 'hidden';
         document.body.scroll = "no";
       } else {

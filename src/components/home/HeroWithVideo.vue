@@ -6,7 +6,11 @@
                 <slot name="description"></slot>
                 <slot name="button"></slot>
                 <div v-if="disclosure" class="mb-5 mt-8 lg:mt-10">
-                    <DisclosureModal :disclosure="disclosure" />
+                    <DisclosureModal :disclosure="disclosure">
+                        <template v-slot:disclosure>
+                            <slot name="disclosure"></slot>
+                        </template>
+                    </DisclosureModal>
                 </div>
           </div>
           <div class="mt-9 md:mt-15 lg:w-3/5 lg:ml-6 lg:mt-7.5 lg:mb-5 relative">
@@ -26,9 +30,6 @@ export default {
     props: ['bgColor', 'color', 'disclosure', 'media'],
     components: {
         DisclosureModal
-    },
-    setup(props) {
-        console.log(props.media)
     }
 }
 </script>

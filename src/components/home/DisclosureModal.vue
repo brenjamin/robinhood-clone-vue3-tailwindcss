@@ -4,11 +4,11 @@
         <p class="ml-3">{{ disclosure.title }}</p>
    </button>
    <transition name="fade" @after-enter="showContent = true">
-        <div class="fixed bg-transparent md:bg-black md:bg-opacity-75 inset-0 z-50 overflow-y-scroll md:px-8" v-show="modalIsOpen">
+        <div class="fixed bg-transparent md:bg-black md:bg-opacity-75 inset-0 z-100 overflow-y-scroll md:px-8" v-show="modalIsOpen">
             <transition name="slide-fade">
             <div class="bg-white md:max-w-screen-md mx-auto h-full w-full md:h-auto md:w-auto p-8 py-20 md:p-12 md:py-20 md:mt-32 relative" v-show="showContent">
                 <h2>{{ disclosure.title }}</h2>
-                <p v-for="(p, index) in disclosure.description" class="mt-6" :key="index">{{ p }}</p>
+                <slot name="disclosure"></slot>
                 <button class="absolute top-5 right-5 focus:outline-none" @click="closeDisclosureModal">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#000" class="w-8 h-8">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 
 .slide-fade-enter-from {
         @apply opacity-0 transform translate-y-24;

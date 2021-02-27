@@ -6,6 +6,9 @@
 h2 {
     @apply text-2xl font-medium tracking-tight leading-tight;
 }
+h2:not(.h1) {
+    letter-spacing: -.015em;
+}
 h1, .h1 {
     @apply text-2.5xl font-medium tracking-tight leading-tighter;
 }
@@ -16,6 +19,9 @@ h1, .h1 {
     }
     h1, .h1{
         @apply text-5.5xl tracking-tight-lg;
+    }
+    h2:not(.h1) {
+        letter-spacing: -.02em;
     }
 }  
 

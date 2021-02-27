@@ -12,6 +12,14 @@
         <router-link :to="{ name: 'SignUp' }" class="button button-black">Sign Up</router-link>
       </div>
     </template>
+    <template v-slot:disclosure>
+      <p class="mt-6">
+        Commission-free trading refers to $0 commissions for Robinhood Financial self-directed individual cash or margin brokerage accounts that trade U.S. listed and certain OTC securities electronically. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s fee schedule to learn more.
+      </p>
+      <p class="mt-6">
+        The free stock offer is available to new users only, subject to the terms and conditions at rbnhd.co/freestock. Free stock chosen randomly from the program’s inventory.
+      </p>
+    </template>
   </HeroWithVideo>
   <VideoCTA :embed="videoCTA.embed" :video="videoCTA.video">
     <template v-slot:callout>
@@ -21,18 +29,41 @@
       <h2 class="h1">We are all investors.</h2>
     </template>
   </VideoCTA>
+  <Features :features="features.features" :imgDesktop="features.imgDesktop" :imgMobile="features.imgMobile" :disclosure="features.disclosure" >
+    <template v-slot:headline>
+      <h2>Introducing Fractional Shares</h2>
+      <p class="mt-4 text-text-gray">Invest in thousands of stocks with as little as $1.</p>
+    </template>
+    <template v-slot:disclosure>
+      <p class="mt-6">
+        Fractional shares are illiquid outside of Robinhood and not transferable. For a complete explanation of conditions, restrictions and limitations associated with fractional shares, see our <span class="text-green underline">Customer Agreement</span> related to fractional shares.
+      </p>
+    </template>
+  </Features>
+  <VerticalSlider />
+  <ProductSlider>
+    <template v-slot:headline>
+      <h2>Our Products</h2>
+    </template>
+  </ProductSlider>
 </template>
 
 <script>
 import Navbar from '@/components/home/Navbar'
 import HeroWithVideo from '@/components/home/HeroWithVideo'
 import VideoCTA from '@/components/home/VideoCTA'
+import Features from '@/components/home/Features'
+import VerticalSlider from '@/components/home/VerticalSlider'
+import ProductSlider from '@/components/home/ProductSlider'
 export default {
   name: 'Home',
   components: {
     Navbar,
     HeroWithVideo,
-    VideoCTA
+    VideoCTA,
+    Features,
+    VerticalSlider,
+    ProductSlider
   },
   setup() {
     const logo = {
@@ -45,10 +76,7 @@ export default {
       bgColor: 'bg-neon-green',
       color: 'text-black',
       disclosure: {
-        title: 'Commissions & Free Stock Disclosures',
-        description: [
-          'Commission-free trading refers to $0 commissions for Robinhood Financial self-directed individual cash or margin brokerage accounts that trade U.S. listed and certain OTC securities electronically. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s fee schedule to learn more.', 'The free stock offer is available to new users only, subject to the terms and conditions at rbnhd.co/freestock. Free stock chosen randomly from the program’s inventory.'
-        ]
+        title: 'Commissions & Free Stock Disclosures'
       },
       media: {
         img: {
@@ -68,9 +96,36 @@ export default {
           src: 'assets/video/superbowl-ad.mp4',
           type: 'mp4'
         }
-      }
+    }
 
-    return { logo, hero, videoCTA }
+    const features =  {
+      imgMobile: {
+        src: 'assets/img/features-mobile.png'
+      },
+      imgDesktop: {
+        src: 'assets/img/features-desktop.png'
+      },
+      features: [
+        {
+          heading: 'Invest Any Amount',
+          description: 'Choose how much you want to invest, and we’ll convert from dollars to parts of a whole share.'
+        },
+        {
+          heading: 'Build a Balanced Portfolio',
+          description: 'Customize your portfolio with pieces of different companies and funds to help reduce risk.'
+        },
+        {
+          heading: 'Trade in Real Time',
+          description: 'Trades placed during market hours are executed at that time, so you’ll always know the share price.'
+        }
+      ],
+      disclosure: {
+        title: 'Fractional Shares Disclosure',
+        color: 'text-text-gray'
+      }
+    }
+
+    return { logo, hero, videoCTA, features }
   }
 }
 </script>

@@ -21,3 +21,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+#media
+src/assets/img
+src/assets/fonts
+src/assets/video

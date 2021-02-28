@@ -139,10 +139,10 @@ export default {
     transform: translateY(5px)
   }
   #toggle-mobile-nav > div.active:first-child {
-    transform: rotate(-45deg) translateY(1.5px)
+    transform:  rotate(-45deg) translateY(1.6px)
   }
   #toggle-mobile-nav > div.active:last-child {
-    transform: rotate(45deg) translateY(-1.5px)
+    transform: rotate(45deg) translateY(-1.6px)
   }
 
   .border-before {

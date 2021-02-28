@@ -26,6 +26,7 @@ const getProducts = () => {
         regulatoryMessage: 'Stocks & funds offered through Robinhood Financial',
         disclosure: {
             title: 'Stocks & Funds Risk Disclosure',
+            button: 'Risk Disclosure',
             description: ['Investing involves risk, including the loss of capital. Investors should consider their investment objectives and risks carefully before investing.'],
             color: 'text-text-gray'
         }

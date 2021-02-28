@@ -1,7 +1,7 @@
 <template>
-    <button @click="openDisclosureModal" :class="disclosure.color ? disclosure.color : 'text-black'" class="hover:text-green flex items-center font-bold tracking-tight text-base-sm md:text-lg focus:outline-none">
+    <button @click="openDisclosureModal" :class="disclosure.color ? disclosure.color : 'text-black'" class="hover:text-green flex items-center font-bold tracking-tight text-base-sm md:text-lg focus:outline-none text-left">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" stroke-width="2" class="stroke-current"></circle><path d="M11.232 18H13.056V9.52H11.232V18ZM11.2 8.128H13.088V6.32H11.2V8.128Z" fill="rgb(0, 0, 0)" class="fill-current"></path></svg>
-        <p class="ml-3">{{ disclosure.title }}</p>
+        <p class="ml-3">{{ disclosure.button ? disclosure.button : disclosure.title }}</p>
    </button>
    <transition name="fade" @after-enter="showContent = true">
         <div class="fixed bg-transparent md:bg-black md:bg-opacity-75 inset-0 z-100 overflow-y-scroll md:px-8" v-show="modalIsOpen">

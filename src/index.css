@@ -36,11 +36,21 @@ h1, .h1 {
     @apply font-bold rounded-full px-10 h-12 inline-flex items-center justify-center;
 }
 
+
 .button-green {
     @apply bg-light-green;
 }
 .button-green:hover {
     @apply bg-green;
+}
+.button-light-green {
+    @apply bg-light-green;
+}
+.button-light-green:hover {
+    @apply bg-lighter-green;
+}
+.button-dark-green {
+    @apply bg-dark-green text-green p-3 h-auto;
 }
 
 .button-black {

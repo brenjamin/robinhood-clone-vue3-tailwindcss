@@ -1,5 +1,5 @@
 <template>
-    <section class="py-21 xl:pb-15 bg-bg-gray overflow-x-hidden">
+    <section class="py-9 md:py-21 xl:pb-15 bg-bg-gray overflow-x-hidden">
         <div class="container">
             <slot name="headline"></slot>
             <div class="flex flex-col xl:flex-row relative">
@@ -13,7 +13,7 @@
                         </li>
                     </ul>
                     <!-- Mobile Buttons -->
-                    <ul ref="buttonWrapper" class="mt-21 md:hidden overflow-x-visible whitespace-nowrap slide-buttons transition-transform" @click="handleClickMobile" :style="[mobileButtonTransform, mobileButtonTransition]">
+                    <ul ref="buttonWrapper" class="mt-12 md:hidden overflow-x-visible whitespace-nowrap slide-buttons transition-transform" @click="handleClickMobile" :style="[mobileButtonTransform, mobileButtonTransition]">
                         <li v-for="(product, index) in products" :key="index" class="inline-block slide-button text-center w-1/2">
                             <button :data-index="index" class="cursor-pointer focus:outline-none text-base-sm w-full" :class="[index === activeProduct && !product.offset ? 'text-black' : '', index === activeProduct && product.offset ? 'text-mid-magenta' : '', index !== activeProduct && !product.offset ? 'text-text-gray hover:text-green' : '', index !== activeProduct && product.offset ? 'text-light-magenta hover:text-mid-magenta' : '']">
                                 {{ product.name }}
@@ -21,10 +21,10 @@
                         </li>
                     </ul>
                     <transition name="fade-down" mode="out-in">
-                        <div class="mt-18" :key="activeProduct">
+                        <div class="mt-10 md:mt-18" :key="activeProduct">
                             <p class="md:max-w-md">{{ products[activeProduct].description }}</p>
-                            <p class="md:hidden mt-12 text-xxs" v-html="products[activeProduct].regulatoryMessage"></p>
-                            <button class="button button-black w-full md:w-auto mt-12 xl:mt-52">Learn More</button>
+                            <p class="md:hidden mt-8 text-xxs" v-html="products[activeProduct].regulatoryMessage"></p>
+                            <button class="button button-black w-full md:w-auto mt-10 xl:mt-52">Learn More</button>
                         </div>
                     </transition>
                 </div>
@@ -72,12 +72,8 @@ export default {
         }
 
         const handleClick = index => {
+            slideIndex.value = index
             activeProduct.value = index
-        }
-
-        const setUpButtons = () => {
-            
-
         }
 
         const handleClickMobile = event => {
@@ -107,12 +103,12 @@ export default {
             lastClone.id = 'last-clone'
             secondClone.id = 'second-clone'
             secondToLastClone.id = 'second-to-last-clone'
+            firstClone.firstChild.classList.remove('text-black');
+            firstClone.firstChild.classList.add('text-text-gray', 'hover:text-green')
             buttonWrapper.value.prepend(lastClone)
             buttonWrapper.value.append(firstClone)
             buttonWrapper.value.prepend(secondToLastClone)
             buttonWrapper.value.append(secondClone)
-
-            console.log('buttons is ', buttons.length);
 
             buttonWrapper.value.addEventListener('transitionend', () => {
                 if (slideIndex.value === products.value.length) {
@@ -150,15 +146,14 @@ export default {
 
 @screen md {
     .fade-down-enter-active, .fade-down-leave-active{
-  @apply transition-all duration-300 ease-in;
-}
-    .fade-down-enter-from,
-    .fade-down-leave-to{
-    @apply opacity-0 transform translate-y-16 ease-in;
+        @apply transition-all duration-300 ease-in;
+    }
+    .fade-down-enter-from, .fade-down-leave-to {
+        @apply opacity-0 transform translate-y-16 ease-in;
     }
     .blur-fade-enter-active, .blur-fade-leave-active {
-  transition-duration: 800ms;
-}
+        transition-duration: 650ms;
+    }
 }
 
 </style>

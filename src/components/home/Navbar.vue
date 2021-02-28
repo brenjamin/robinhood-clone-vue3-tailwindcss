@@ -31,10 +31,10 @@
       </ul>
     </div>
     <div class="hidden lg:flex items-center">
-      <router-link :to="{ name: 'Login' }" class="font-bold hover:text-green">
+      <router-link :to="{ name: 'Home' }" class="font-bold hover:text-green">
         Log In
       </router-link>
-      <router-link :to="{ name: 'SignUp' }" class="button button-green ml-8">
+      <router-link :to="{ name: 'Home' }" class="button button-green ml-8">
         Sign Up
       </router-link>
     </div>
@@ -75,7 +75,7 @@
 
 <script>
 import { onMounted,ref } from 'vue'
-import getLinks from '@/composables/getLinks'
+import getNavLinks from '@/composables/getNavLinks'
 
 export default {
   name: "Navbar",
@@ -89,7 +89,7 @@ export default {
       })
     })
 
-    const links = getLinks()
+    const links = getNavLinks()
     const mobileMenuIsActive = ref(false)
 
     const toggleSubmenu = link => {

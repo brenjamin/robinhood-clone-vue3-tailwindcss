@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-const getLinks = () => {
+const getNavLinks = () => {
   const links = [
     {
       top: {
@@ -91,4 +91,4 @@ const getLinks = () => {
   return ref(links);
 };
 
-export default getLinks;
+export default getNavLinks;

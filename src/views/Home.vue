@@ -9,7 +9,7 @@
     </template>
     <template v-slot:button>
         <div class="hidden md:flex md:justify-center lg:justify-start md:mt-5 lg:mt-11 order-last lg:order-none">
-        <router-link :to="{ name: 'SignUp' }" class="button button-black">Sign Up</router-link>
+        <router-link :to="{ name: 'Home' }" class="button button-black">Sign Up</router-link>
       </div>
     </template>
     <template v-slot:disclosure>
@@ -46,6 +46,8 @@
       <h2>Our Products</h2>
     </template>
   </ProductSlider>
+  <Footer />
+  <DownloadAppBanner />
 </template>
 
 <script>
@@ -55,6 +57,8 @@ import VideoCTA from '@/components/home/VideoCTA'
 import Features from '@/components/home/Features'
 import VerticalSlider from '@/components/home/VerticalSlider'
 import ProductSlider from '@/components/home/ProductSlider'
+import Footer from '@/components/home/Footer'
+import DownloadAppBanner from '@/components/home/DownloadAppBanner'
 export default {
   name: 'Home',
   components: {
@@ -63,7 +67,9 @@ export default {
     VideoCTA,
     Features,
     VerticalSlider,
-    ProductSlider
+    ProductSlider,
+    Footer,
+    DownloadAppBanner
   },
   setup() {
     const logo = {

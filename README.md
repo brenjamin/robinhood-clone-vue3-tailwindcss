@@ -1,4 +1,5 @@
-# robinhood-clone
+# Robinhood Homepage Clone
+Made with Vue 3 and Tailwind CSS
 
 ## Project setup
 ```

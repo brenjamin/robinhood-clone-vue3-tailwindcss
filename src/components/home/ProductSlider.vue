@@ -28,7 +28,7 @@
                         </div>
                     </transition>
                 </div>
-                <div class="xl:absolute xl:top-0 xl:right-0 mx-auto mt-7 xl:mt-0 z-0">
+                <div ref="imageWrapper" class="xl:absolute xl:top-0 xl:right-0 mx-auto mt-7 xl:mt-0 z-0">
                     <transition name="blur-fade" mode="out-in">
                     <img :src="require('@/' + products[activeProduct].img.src)" :alt="products[activeProduct].img.alt" :key="activeProduct" class="w-100 xl:w-146 xl:h-auto">
                     </transition>
@@ -66,6 +66,7 @@ export default {
         const activeProduct = ref(0)
         const buttonWrapper = ref(null)
         const slideIndex = ref(0)
+        const imageWrapper = ref(null)
 
         const mobileButtonTransition = {
             transitionDuration: '500ms'
@@ -120,13 +121,23 @@ export default {
                 }
 
             })
+
+            // set minimum height of image wrapper
+            const height = imageWrapper.value.firstChild.height
+            console.log(height)
+            imageWrapper.value.style.minHeight = height + 'px'
+
+            window.onresize = () => {
+                const height = imageWrapper.value.firstChild.height
+                imageWrapper.value.style.minHeight = height + 'px'
+            }
         })
 
         const mobileButtonTransform = computed(() => {
             return `transform: translateX(calc(-50% * ${slideIndex.value } - 75%))`;
         })
 
-        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition }
+        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition, imageWrapper }
     }
     
     

@@ -30,7 +30,7 @@
                 </div>
                 <div ref="imageWrapper" class="xl:absolute xl:top-0 xl:right-0 mx-auto mt-7 xl:mt-0 z-0">
                     <transition name="blur-fade" mode="out-in">
-                    <img :src="require('@/' + products[activeProduct].img.src)" :alt="products[activeProduct].img.alt" :key="activeProduct" class="w-100 xl:w-146 xl:h-auto">
+                    <img @load="setImageWrapperHeight" :src="require('@/' + products[activeProduct].img.src)" :alt="products[activeProduct].img.alt" :key="activeProduct" class="w-100 xl:w-146 xl:h-auto">
                     </transition>
                 </div>
             </div>
@@ -122,22 +122,24 @@ export default {
 
             })
 
-            // set minimum height of image wrapper
-            const height = imageWrapper.value.firstChild.height
-            console.log(height)
-            imageWrapper.value.style.minHeight = height + 'px'
-
             window.onresize = () => {
                 const height = imageWrapper.value.firstChild.height
                 imageWrapper.value.style.minHeight = height + 'px'
             }
         })
 
+        const setImageWrapperHeight = (event) => {
+            // set minimum height of image wrapper
+            const height = event.target.height
+            console.log(height)
+            imageWrapper.value.style.minHeight = height + 'px'
+        }
+
         const mobileButtonTransform = computed(() => {
             return `transform: translateX(calc(-50% * ${slideIndex.value } - 75%))`;
         })
 
-        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition, imageWrapper }
+        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition, imageWrapper, setImageWrapperHeight }
     }
     
     

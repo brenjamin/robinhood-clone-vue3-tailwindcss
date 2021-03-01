@@ -30,8 +30,14 @@
                 </div>
                 <div ref="imageWrapper" class="xl:absolute xl:top-0 xl:right-0 mx-auto mt-7 xl:mt-0 z-0">
                     <transition name="blur-fade" mode="out-in">
-                    <img @load="setImageWrapperHeight" :src="require('@/' + products[activeProduct].img.src)" :alt="products[activeProduct].img.alt" :key="activeProduct" class="w-100 xl:w-146 xl:h-auto">
+                    <img :src="require('@/' + products[activeProduct].img.src)" :alt="products[activeProduct].img.alt" :key="activeProduct" class="w-100 xl:w-146 xl:h-auto">
                     </transition>
+                </div>
+                <!-- preload product slider images (for smooth transition) -->
+                <div class="hidden">
+                    <template v-for="(product, index) in products" :key="index">
+                        <img :src="require('@/' + product.img.src)" :alt="product.img.alt" class="w-100 xl:w-146 xl:h-auto">
+                    </template>
                 </div>
             </div>
             <div class="mt-5 md:mt-12 xl:mt-25 flex justify-center md:justify-between items-center">
@@ -95,6 +101,8 @@ export default {
         }
 
         onMounted(() => {
+
+            // clone buttons on mobile for infinitely looping button slider
             let buttons = document.querySelectorAll('.slide-button')
             const firstClone = buttons[0].cloneNode(true)
             const lastClone = buttons[buttons.length - 1].cloneNode(true)
@@ -111,6 +119,7 @@ export default {
             buttonWrapper.value.prepend(secondToLastClone)
             buttonWrapper.value.append(secondClone)
 
+            // event listener on button wrapper transition end
             buttonWrapper.value.addEventListener('transitionend', () => {
                 if (slideIndex.value === products.value.length) {
                     mobileButtonTransition.transitionDuration = '0ms'
@@ -121,25 +130,13 @@ export default {
                 }
 
             })
-
-            window.onresize = () => {
-                const height = imageWrapper.value.firstChild.height
-                imageWrapper.value.style.minHeight = height + 'px'
-            }
         })
-
-        const setImageWrapperHeight = (event) => {
-            // set minimum height of image wrapper
-            const height = event.target.height
-            console.log(height)
-            imageWrapper.value.style.minHeight = height + 'px'
-        }
 
         const mobileButtonTransform = computed(() => {
             return `transform: translateX(calc(-50% * ${slideIndex.value } - 75%))`;
         })
 
-        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition, imageWrapper, setImageWrapperHeight }
+        return { products, activeProduct, handleClick, handleClickMobile, mobileButtonTransform, buttonWrapper, slideIndex, mobileButtonTransition, imageWrapper }
     }
     
     

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-black p-4 text-white flex justify-between items-center fixed bottom-0 inset-x-0 z-50 lg:hidden border-t border-border-gray-dark box-content">
+  <div class="bg-black p-4 text-white flex justify-between items-center fixed bottom-0 inset-x-0 z-30 lg:hidden border-t border-border-gray-dark box-content">
     <div class="flex items-center">
         <img src="@/assets/img/app-banner/robinhood-icon.svg" alt="Robinhood app icon">
         <div class="ml-4 flex flex-col item-start">

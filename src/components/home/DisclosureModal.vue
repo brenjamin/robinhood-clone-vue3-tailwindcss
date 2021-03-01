@@ -4,9 +4,9 @@
         <p class="ml-3">{{ disclosure.button ? disclosure.button : disclosure.title }}</p>
    </button>
    <transition name="fade" @after-enter="showContent = true">
-        <div class="fixed bg-transparent md:bg-black md:bg-opacity-75 inset-0 z-100 overflow-y-scroll md:px-8" v-show="modalIsOpen">
+        <div class="fixed bg-transparent bg-white md:bg-black md:bg-opacity-75 inset-0 z-100 overflow-y-scroll md:px-8" v-show="modalIsOpen">
             <transition name="slide-fade">
-            <div class="bg-white md:max-w-screen-md mx-auto h-full w-full md:h-auto md:w-auto p-8 py-20 md:p-12 md:py-20 md:mt-32 relative" v-show="showContent">
+            <div class="bg-white md:max-w-screen-md mx-auto min-h-full w-full md:min-h-0 md:h-auto md:w-auto p-8 py-20 md:p-12 md:py-20 md:mt-32 relative" v-show="showContent">
                 <h2>{{ disclosure.title }}</h2>
                 <slot name="disclosure"></slot>
                 <button class="absolute top-5 right-5 focus:outline-none" @click="closeDisclosureModal">

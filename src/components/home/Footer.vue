@@ -2,13 +2,13 @@
   <footer class="bg-black text-white pt-13.5 pb-9">
       <div class="container">
           <nav class="flex flex-col md:flex-row md:flex-wrap font-bold lg:flex-no-wrap lg:justify-between pb-25 lg:pb-5">
-              <div class="w-full lg:w-2/5 lg:order-last mb-2 md:mb-15 lg:mb-18 md:px-2">
+              <div class="w-full lg:w-2/5 lg:order-last mb-15 lg:mb-18 md:px-2">
                  <NewsletterSignup />
               </div>
               <div v-for="(column, index) in links" :key="index" class="flex flex-col md:w-1/3 lg:w-1/6 md:px-2">
                 <template v-for="(link, index) in column" :key="index">
-                    <router-link v-if="link.route" :to="{ name: link.route }" class="my-2 md:first:mt-0 md:last:mb-0" :class="link.offset ? 'hover:text-mid-magenta' : 'hover:text-green'">{{ link.name }}</router-link>
-                    <a v-else @click.prevent :href="link.href" target="_blank" class="my-2 md:first:mt-0 md:last:mb-0" :class="link.offset ? 'hover:text-mid-magenta' : 'hover:text-green'">{{ link.name }}</a>
+                    <router-link v-if="link.route" :to="{ name: link.route }" class="my-2 first:mt-0 md:last:mb-0" :class="link.offset ? 'hover:text-mid-magenta' : 'hover:text-green'">{{ link.name }}</router-link>
+                    <a v-else @click.prevent :href="link.href" target="_blank" class="my-2 first:mt-0 md:last:mb-0" :class="link.offset ? 'hover:text-mid-magenta' : 'hover:text-green'">{{ link.name }}</a>
                 </template>
                 <div v-if="index === links.length - 1" class="flex mb-2 mt-4">
                     <img src="@/assets/img/footer/linkedin-logo.svg" alt="LinkedIn Logo" class="w-5 mx-2.5 ml-0">

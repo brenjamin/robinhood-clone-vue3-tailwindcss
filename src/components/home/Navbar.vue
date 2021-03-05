@@ -31,7 +31,7 @@
       </ul>
     </div>
     <div class="hidden lg:flex items-center">
-      <router-link :to="{ name: 'Home' }" class="font-bold hover:text-green">
+      <router-link :to="{ name: 'Login' }" class="font-bold hover:text-green">
         Log In
       </router-link>
       <router-link :to="{ name: 'Home' }" class="button button-green ml-8">

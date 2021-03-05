@@ -32,6 +32,11 @@ h1, .h1 {
 
 
 /* Buttons */
+
+button {
+    @apply focus:outline-none;
+}
+
 .button {
     @apply font-bold rounded-full px-10 h-12 inline-flex items-center justify-center;
 }
@@ -59,4 +64,8 @@ h1, .h1 {
 
 .button-black:hover {
     @apply bg-dark-gray;
+}
+
+.button-login {
+    @apply rounded h-12 px-12 inline-flex items-center justify-center text-white bg-light-green hover:bg-green font-bold;
 }

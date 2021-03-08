@@ -69,3 +69,8 @@ button {
 .button-login {
     @apply rounded h-12 px-12 inline-flex items-center justify-center text-white bg-light-green hover:bg-green font-bold;
 }
+
+/* Firefox - remove red shadow from required inputs */
+input:required {
+    box-shadow: none;
+}

@@ -13,8 +13,8 @@
                 <h2 class="text-center">Hi there!</h2>
                 <h3 class="text-center mt-3 pb-4">Your free stock referral from robinhood is waiting for you. You could get…</h3>
                 <div v-if="loading" class="my-6">
-                    <div class="h-40 w-30 mx-auto rounded-xl bg-light-gray"></div>
-                    <div class="mt-3 w-30 h-6 rounded-full mx-auto bg-light-gray"></div>
+                    <div class="h-40 w-30 mx-auto rounded-xl shimmer"></div>
+                    <div class="mt-3 w-30 h-6 rounded-full mx-auto shimmer"></div>
                 </div>
                 <RotatingCards v-else :stocks="updatedStockCards" />
                 <div class="text-center">
@@ -157,5 +157,20 @@ export default {
         @apply w-6 h-6 bg-contain absolute left-0 -top-px md:top-0.5;
         background-image: url('~@/assets/img/auth/star-bullet.svg');
         background-size: 24 24px;
+    }
+
+    .shimmer {
+        animation : shimmer 4s infinite linear;
+        background-image: linear-gradient(to right, #f2f2f2 0%, #E8E8E8 50%, #f2f2f2 100%);
+        background-size: 250px 100%;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -500px 0;
+        }
+        100% {
+            background-position: 500px 0;
+        }
     }
 </style>

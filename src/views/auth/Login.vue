@@ -1,7 +1,7 @@
 <template>
   <div class="md:flex h-screen px-6 md:px-0">
     <div class="hidden md:block md:w-1/2 relative">
-      <img src="@/assets/img/login-page-image.jpg" alt="people using the robinhood app" class="h-full w-full object-cover object-center">
+      <img src="@/assets/img/auth/login-page-image.jpg" alt="people using the robinhood app" class="h-full w-full object-cover object-center">
     </div>
     <div class="mt-16 max-w-md mx-auto md:w-1/2 md:flex md:items-center md:mx-13 md:mt-0">
     <form @submit.prevent class="w-full text-base-xs">

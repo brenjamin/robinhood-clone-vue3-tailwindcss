@@ -21,7 +21,9 @@ module.exports = {
         'dark-bg-gray': 'rgb(30,33,36)',
         'border-gray': 'rgb(227,233,237)',
         'border-gray-dark': 'rgb(121,133,139)',
-        'border-gray-light': 'rgb(84, 93, 97)'
+        'border-gray-light': 'rgb(84, 93, 97)',
+        'red': 'rgb(255, 80, 0)',
+        'blue': 'rgb(0, 127, 245)'
       },
       fontSize: {
         'xxs': '.6875rem',
@@ -32,6 +34,7 @@ module.exports = {
         '5.5xl': '3.25rem'
       },
       spacing: {
+        '0.75': '.1875rem',
         '1.25': '.3125rem',
         '3.75': '.9375rem',
         '7.5': '1.875rem',
@@ -39,9 +42,11 @@ module.exports = {
         '13': '3.25rem',
         '13.5': '3.375rem',
         '15': '3.75rem',
+        '16.5': '4.125rem',
         '18': '4.5rem',
         '21': '5.25rem',
         '25': '6.25rem',
+        '30': '7.5rem',
         '34': '8.5rem',
         '75': '18.75rem',
         '100': '25rem',
@@ -55,11 +60,16 @@ module.exports = {
         'tight-lg': '-.035em'
       },
       borderWidth: {
+        '5': '5px',
         '6': '6px',
         '10': '10px'
       },
       zIndex: {
+        '-1': '-1',
         100: 100
+      },
+      transitionDuration: {
+        '800': '800ms'
       }
     },
   },

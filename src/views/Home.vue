@@ -9,7 +9,7 @@
     </template>
     <template v-slot:button>
         <div class="hidden md:flex md:justify-center lg:justify-start md:mt-5 lg:mt-11 order-last lg:order-none">
-        <router-link :to="{ name: 'Home' }" class="button button-black">Sign Up</router-link>
+        <router-link :to="{ name: 'SignupFreeStock' }" class="button button-black">Sign Up</router-link>
       </div>
     </template>
     <template v-slot:disclosure>

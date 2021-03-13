@@ -18,7 +18,7 @@
                 </div>
                 <RotatingCards v-else :stocks="updatedStockCards" />
                 <div class="text-center">
-                    <router-link :to="{ name: 'SignupFreeStock' }" class="button button-green mx-auto">Claim your free stock now</router-link>
+                    <router-link :to="{ name: 'Signup' }" class="button button-green mx-auto">Claim your free stock now</router-link>
                 </div>
             </div>
             <ul class="md:max-w-lg lg:max-w-xl mx-auto">

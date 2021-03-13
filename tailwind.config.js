@@ -23,9 +23,12 @@ module.exports = {
         'border-gray-dark': 'rgb(121,133,139)',
         'border-gray-light': 'rgb(84, 93, 97)',
         'red': 'rgb(255, 80, 0)',
-        'blue': 'rgb(0, 127, 245)'
+        'blue': 'rgb(0, 127, 245)',
+        'fine-print': 'rgb(180, 189, 194)'
       },
       fontSize: {
+        'inherit': 'inherit',
+        'fine-print': '.796875rem',
         'xxs': '.6875rem',
         'base-xs': '.8125rem',
         'base-sm': '.9375rem',
@@ -45,6 +48,7 @@ module.exports = {
         '16.5': '4.125rem',
         '18': '4.5rem',
         '21': '5.25rem',
+        '22': '5.5rem',
         '25': '6.25rem',
         '30': '7.5rem',
         '34': '8.5rem',
@@ -54,7 +58,8 @@ module.exports = {
         '146': '36.5rem'
       },
       lineHeight: {
-        'tighter': '1.15'
+        'tighter': '1.15',
+        'lax': '1.75'
       },
       letterSpacing: {
         'tight-lg': '-.035em'
@@ -70,6 +75,9 @@ module.exports = {
       },
       transitionDuration: {
         '800': '800ms'
+      },
+      maxWidth: {
+        'xxs': '16.625rem'
       }
     },
   },

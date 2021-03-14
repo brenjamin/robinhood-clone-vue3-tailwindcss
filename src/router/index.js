@@ -3,6 +3,7 @@ import Home from '@/views/Home'
 import Login from '@/views/auth/Login'
 import Signup from '@/views/auth/Signup'
 import SignupFreeStock from '@/views/auth/SignupFreeStock'
+import Dashboard from '@/views/Dashboard'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/signup-free-stock',
     name: 'SignupFreeStock',
     component: SignupFreeStock
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   }
 ]
 

@@ -24,7 +24,9 @@ module.exports = {
         'border-gray-light': 'rgb(84, 93, 97)',
         'red': 'rgb(255, 80, 0)',
         'blue': 'rgb(0, 127, 245)',
-        'fine-print': 'rgb(180, 189, 194)'
+        'fine-print': 'rgb(180, 189, 194)',
+        'inherit': 'inherit',
+        'neutral-bg-3': 'rgb(48,54,58)'
       },
       fontSize: {
         'inherit': 'inherit',
@@ -40,6 +42,7 @@ module.exports = {
         '0.75': '.1875rem',
         '1.25': '.3125rem',
         '3.75': '.9375rem',
+        '4.5': '1.125rem',
         '7.5': '1.875rem',
         '12.5': '3.125rem',
         '13': '3.25rem',

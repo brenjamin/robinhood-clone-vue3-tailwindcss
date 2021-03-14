@@ -16,5 +16,10 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "emulators": {
+    "functions": {
+      "port": "6001"
+    }
   }
 }

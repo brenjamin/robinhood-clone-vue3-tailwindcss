@@ -9,12 +9,16 @@
           <p class="text-2xl font-medium">Make Your Money Move</p>
           <p class="text-base-sm mt-3">Robinhood lets you invest in companies you love, commission-free.</p>
         </div>
-        <form @submit.prevent class="text-base-xs mt-10">
-            <input type="email" placeholder="Email" class="block w-full px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
-            <input type="password" placeholder="Password" class="block w-full mt-6 px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
-            <button type="submit" class="button-login mt-12">
+        <form @submit.prevent="handleSubmit" class="text-base-xs mt-10">
+            <input v-model="email" type="email" placeholder="Email" class="block w-full px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
+            <input v-model="password" type="password" placeholder="Password" class="block w-full mt-6 px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
+            <button v-if="!isPending" type="submit" class="button-login mt-12">
               Continue
             </button>
+            <button v-else disabled class="button-login mt-12">
+              Loading
+            </button>
+            <div v-if="error" class="text-red mt-4">{{ error }}</div>
         </form>
         <div class="hidden md:block text-fine-print leading-relaxed mt-25">
           <p>All investments involve risk, including the possible loss of principal. Investors should consider their investment objectives and risks carefully before investing.</p>
@@ -46,9 +50,27 @@
 </template>
 
 <script>
+import useSignup from '@/composables/useSignup'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   name: "Signup",
   setup() {
+    const { error, signup, isPending } = useSignup()
+
+    const email = ref('')
+    const password = ref('')
+
+    const router = useRouter()
+
+
+    const handleSubmit = async () => {
+        const res = await signup(email.value, password.value)
+        if (!error.value) {
+            router.push({ name: 'Dashboard'})
+        }
+    }
+
     const features = [
       {
         heading: "Commission-free trading",
@@ -64,8 +86,9 @@ export default {
         description: "Set up customized news and notifications to stay on top of your assets as casually or as relentlessly as you like. Controlling the flow of info is up to you."
       }
     ]
+    
 
-    return { features }
+    return { features, email, password, error, isPending, handleSubmit }
   }
 }
 </script>

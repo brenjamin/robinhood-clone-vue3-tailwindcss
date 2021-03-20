@@ -74,3 +74,11 @@ button {
 input:required {
     box-shadow: none;
 }
+
+/* box-shadow: 0px 12px 24px var(--rh__shadow__s1), 0px -12px 24px var(--rh__shadow__s2); rgba(0,0,0,0.06) rgba(0,0,0,0.06)
+    transition: border-color 300
+}
+
+border rgb(227,233,237)
+
+svg color rgb(111,120,126) */

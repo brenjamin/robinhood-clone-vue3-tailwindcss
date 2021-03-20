@@ -10,7 +10,8 @@
     "core-js": "^3.6.5",
     "firebase": "^8.2.9",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.2.0",

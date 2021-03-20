@@ -4,6 +4,8 @@ import Login from '@/views/auth/Login'
 import Signup from '@/views/auth/Signup'
 import SignupFreeStock from '@/views/auth/SignupFreeStock'
 import Dashboard from '@/views/Dashboard'
+import SingleStock from '@/components/dashboard/SingleStock'
+import RandomStock from '@/components/dashboard/RandomStock'
 
 const routes = [
   {
@@ -29,7 +31,20 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    children: [
+      {
+        path: 'stocks/:symbol',
+        name: 'SingleStock',
+        component: SingleStock,
+        props: true
+      },
+      {
+        path: '',
+        name: 'RandomStock',
+        component: RandomStock
+      }
+    ]
   }
 ]
 

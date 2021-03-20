@@ -44,6 +44,7 @@ module.exports = {
         '3.75': '.9375rem',
         '4.5': '1.125rem',
         '7.5': '1.875rem',
+        '8.5': '2.125rem',
         '12.5': '3.125rem',
         '13': '3.25rem',
         '13.5': '3.375rem',
@@ -57,6 +58,7 @@ module.exports = {
         '34': '8.5rem',
         '75': '18.75rem',
         '100': '25rem',
+        '120': '30rem',
         '128': '32rem',
         '146': '36.5rem'
       },
@@ -81,6 +83,9 @@ module.exports = {
       },
       maxWidth: {
         'xxs': '16.625rem'
+      },
+      boxShadow: {
+        'input': '0px 12px 24px rgba(0,0,0,0.06), 0px -12px 24px rgba(0,0,0,0.06)'
       }
     },
   },

@@ -32,6 +32,9 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+    redirect: {
+      name: 'RandomStock'
+    },
     children: [
       {
         path: 'stocks/:symbol',

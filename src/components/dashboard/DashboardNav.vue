@@ -34,7 +34,7 @@
           <button @click="toggleDarkMode" class="font-bold">
               Dark Mode
           </button>
-          <button class="hover:text-green dark:hover:text-red font-bold">
+          <button class="hover:text-green dark:hover:text-red font-bold" @click="logoutUser">
               Log Out
           </button>
       </div>
@@ -45,6 +45,9 @@
 <script>
 import { ref } from 'vue'
 import { projectFunctions } from '@/firebase/config'
+import useLogout from '@/composables/useLogout'
+import { useRouter } from 'vue-router'
+
 export default {
     name: 'DashboardNav',
     setup() {
@@ -54,6 +57,15 @@ export default {
         const searchIsFocused = ref(false)
         const searchResults = ref([])
         const transitioningToDarkMode = ref(false)
+        const router = useRouter()
+        const { logout, error, isPending } = useLogout()
+
+        const logoutUser = async () => {
+            await logout()
+            if (!error.value) {
+                router.push({name: 'Login'})
+            }
+        }
         
 
         const toggleDarkMode = () => {
@@ -95,10 +107,11 @@ export default {
         const blurInput = () => {
             setTimeout(() => {
                 searchIsFocused.value = false
-            }, 50)
+            }, 200)
         }
+
         
-        return { toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput }
+        return { toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput, logoutUser }
     }
 
 }

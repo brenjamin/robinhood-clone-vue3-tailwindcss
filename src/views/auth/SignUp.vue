@@ -12,11 +12,11 @@
         <form @submit.prevent="handleSubmit" class="text-base-xs mt-10">
             <input v-model="email" type="email" placeholder="Email" class="block w-full px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
             <input v-model="password" type="password" placeholder="Password" class="block w-full mt-6 px-3 py-1.5 bg-light-gray rounded border border-solid border-light-gray hover:bg-white transition-colors duration-200 focus:outline-none focus:border-green focus:bg-white">
-            <button v-if="!isPending" type="submit" class="button-login mt-12">
+            <button v-if="!isPending" type="submit" class="button-login mt-12 min-w-36">
               Continue
             </button>
-            <button v-else disabled class="button-login mt-12">
-              Loading
+            <button v-else disabled class="button-login mt-12 min-w-36">
+              <img class="w-10" :src="require('@/assets/img/auth/spinner.svg')">
             </button>
             <div v-if="error" class="text-red mt-4">{{ error }}</div>
         </form>

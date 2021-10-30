@@ -25,11 +25,7 @@ export default {
       .then((result) => {
         let arr = JSON.parse(result.data)
         randomStock.value = arr[Math.floor(Math.random() * arr.length)]
-        console.log(randomStock.value)
-      })
-
-
-      
+      }) 
     }
 
     getRandomStock()

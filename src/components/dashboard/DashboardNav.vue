@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between z-50 fixed inset-x-0 h-16 px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black transiton-all duration-1000">
+  <header class="flex justify-between z-50 fixed inset-x-0 h-16 px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black transiton-all duration-1000 ease-linear">
       <div class="flex lg:w-3/5 xl:w-1/2 flex-grow">
         <div class="flex items-center">
             <div class="hover:text-green dark:hover:text-red">
@@ -16,15 +16,21 @@
                         </div>
                         <input type="text" v-model="searchTerm" @input="updateStocks" @focus="searchIsFocused = true" @blur="blurInput" class="flex-grow h-8.5 focus:outline-none bg-inherit">
                     </div>
-                    <div class="py-4" v-show="searchResults.length && searchIsFocused">
-                        <div  v-for="(stock, index) in searchResults" :key="index" class="hover:bg-border-gray dark:hover:bg-neutral-bg-3 mt-1.5 first:mt-0 -mx-3">
+                    <div class="py-4" v-show="searchIsFocused && resultsReturned">
+                        <div v-if="searchResults.length">
+                            <div v-for="(stock, index) in searchResults" :key="index" class="hover:bg-border-gray dark:hover:bg-neutral-bg-3 mt-1.5 first:mt-0 -mx-3">
                             <router-link :to="{ name: 'SingleStock', params: { symbol: stock.symbol } }" class="text-base-xs" @click="searchIsFocused = false">
                             <div class="grid gap-1 grid-cols-12 px-3">
                                 <span class="col-span-2" v-html="stock.symbolHTML"></span>
                                 <span class="col-span-10" v-html="stock.securityName"></span>
                             </div>
                             </router-link>
+                            </div>
                         </div>
+                        <div v-else>
+                            We were unable to find any results for your search.
+                        </div>
+                        
                     </div>
                 </div>
         </div>
@@ -58,6 +64,7 @@ export default {
         const searchResults = ref([])
         const transitioningToDarkMode = ref(false)
         const router = useRouter()
+        const resultsReturned = ref(false)
         const { logout, error, isPending } = useLogout()
 
         const logoutUser = async () => {
@@ -83,22 +90,25 @@ export default {
             clearTimeout(searchTimeout)
             searchTimeout = setTimeout(() => {
                 if (searchTerm.value) {
-                    console.log(searchTerm.value)
                     searchStock(searchTerm.value)
                     .then((result) => {
-                    searchResults.value = JSON.parse(result.data).filter((item) => {
-                        return item.region === 'US'
+                        let results = JSON.parse(result.data)
+                        if (results.length) {
+                            searchResults.value = results.filter((item) => {
+                                return item.region === 'US'
+                            })
+                            let matchThis = new RegExp(searchTerm.value,"gi")
+                            searchResults.value = searchResults.value.map((item) => {
+                                item.symbolHTML = item.symbol.replace(matchThis, '<span class="text-green dark:text-red">$&</span>')
+                                item.securityName = item.securityName.replace(matchThis, '<span class="text-green dark:text-red">$&</span>')
+                                return item
+                            }) 
+                        }
+                        resultsReturned.value = true
                     })
-                    let matchThis = new RegExp(searchTerm.value,"gi");
-                    searchResults.value = searchResults.value.map((item) => {
-                        item.symbolHTML = item.symbol.replace(matchThis, '<span class="text-green dark:text-red">$&</span>')
-                        item.securityName = item.securityName.replace(matchThis, '<span class="text-green dark:text-red">$&</span>')
-                        return item
-                    })
-                    console.log(searchResults.value)
-                });
                 } else {
                     searchResults.value = []
+                    resultsReturned.value = false
                 }
                 
             }, 500)
@@ -111,7 +121,7 @@ export default {
         }
 
         
-        return { toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput, logoutUser }
+        return { toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput, logoutUser, resultsReturned }
     }
 
 }

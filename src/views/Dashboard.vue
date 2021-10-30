@@ -1,10 +1,15 @@
 <template>
-  <div class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white transition-all duration-1000">
+  <div class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white transition-all duration-1000 ease-linear">
     <DashboardNav />
     <div class="h-16">
     </div>
-    <div class="max-w-screen-lg px-5 lg:px-10 xl:px-6 mx-auto">
-      <router-view />
+    <div class="max-w-screen-lg px-5 lg:px-10 xl:px-6 mx-auto py-9">
+      <div class="w-3/5">
+        <router-view />
+      </div>
+      <div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -27,5 +32,4 @@ export default {
 </script>
 
 <style>
-
 </style>

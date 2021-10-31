@@ -8,6 +8,7 @@ module.exports = {
         'light-green': 'rgb(0, 200, 5)',
         'neon-green': 'rgb(195,245,60)',
         'lighter-green': 'rgb(38,208,43)',
+        'lightest-green': 'rgba(0,200,5,0.2)',
         'dark-green': 'rgb(0, 64, 34)',
         'light-magenta': 'rgb(255, 144, 175)',
         'mid-magenta': 'rgb(255, 90, 135)',
@@ -26,7 +27,8 @@ module.exports = {
         'blue': 'rgb(0, 127, 245)',
         'fine-print': 'rgb(180, 189, 194)',
         'inherit': 'inherit',
-        'neutral-bg-3': 'rgb(48,54,58)'
+        'neutral-bg-3': 'rgb(48,54,58)',
+        'netural-fg-2': 'rgb(145,159,166)'
       },
       fontSize: {
         'inherit': 'inherit',
@@ -92,7 +94,8 @@ module.exports = {
   variants: {
     extend: {
       margin: ['responsive', 'first', 'last'],
-      padding: ['responsive', 'first', 'last']
+      padding: ['responsive', 'first', 'last'],
+      borderWidth: ['responsive', 'dark']
     },
   },
   plugins: [

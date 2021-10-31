@@ -7,6 +7,27 @@ import Dashboard from '@/views/Dashboard'
 import SingleStock from '@/components/dashboard/SingleStock'
 import RandomStock from '@/components/dashboard/RandomStock'
 
+// route guards
+import  { projectAuth } from '../firebase/config'
+
+const requireAuth = (to, from, next) => {
+  let user = projectAuth.currentUser
+  if (!user) {
+    next({ name: 'Login' })
+  } else {
+    next()
+  }
+}
+
+const autoLogin = (to, from, next) => {
+  let user = projectAuth.currentUser
+  if (!user) {
+    next()
+  } else {
+    next({ name: 'Dashboard' })
+  }
+}
+
 const routes = [
   {
     path: '/',
@@ -16,7 +37,8 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    beforeEnter: autoLogin
   },
   {
     path: '/signup',
@@ -35,6 +57,7 @@ const routes = [
     redirect: {
       name: 'RandomStock'
     },
+    beforeEnter: requireAuth,
     children: [
       {
         path: 'stocks/:symbol',

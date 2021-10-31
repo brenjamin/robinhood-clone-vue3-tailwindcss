@@ -22,7 +22,7 @@
           </button>
         </div>
       </label>
-      <router-link :to="{ name: 'Login' }" class="block text-green font-medium text-base-xs mt-3.5">Forgot your username or password?</router-link>
+      <router-link :to="{ name: 'Signup' }" class="block text-green font-medium text-base-xs mt-3.5">Don't have an account? Sign up.</router-link>
       <div class="mt-24">
         <button v-if="!isPending" type="submit" class="button-login mt-12 min-w-36">
           Sign In
@@ -40,6 +40,7 @@
 import { ref } from 'vue'
 import useLogin from '@/composables/useLogin'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default {
   name: 'Login',
@@ -50,14 +51,21 @@ export default {
     const { error, login, isPending } = useLogin()
     const router = useRouter()
 
+    const store = useStore()
+
+    console.log(store.state.user)
+    
+
     const handleClick = () => {
-      console.log('handle');
       inputType.value = inputType.value === 'password' ? 'text' : 'password'
     }
 
     const handleSubmit = async () => {
       const res = await login(email.value, password.value)
+      console.log(res.user)
       if (!error.value) {
+          store.commit('setUser', res.user)
+          console.log(store.state.user)
           router.push({ name: 'Dashboard'})
       }
     }

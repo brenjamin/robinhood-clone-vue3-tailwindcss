@@ -10,22 +10,75 @@
     <!-- <p v-for="(item, index) in intradayPrices" :key="index" class="px-1 inline-block">
       {{ item.average || 'none' }}
     </p> -->
-    <div class="mt-3">
+    <div :class="intradayPrices.length > 1 ? 'mt-3' : 'mt-3 h-80'">
       <canvas id="chart" ref="chart" v-show="intradayPrices.length"></canvas>
       <p v-if="!intradayPrices.length">Price data not available</p>
     </div>
-    <div class="mt-6 flex items-center">
-      <button class="text-base-xs font-bold pb-3 border-b-2 flex justify-center mx-3" :class="differenceSign > -1 ? ' border-light-green' : 'border-red'" disabled><span class="inline-block" :class="differenceSign > -1 ? 'text-light-green' : 'text-red'">1D</span></button>
-      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1W</span></button>
-      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1M</span></button>
-      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1Y</span></button>
-      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">5Y</span></button>
+    <div class="mt-10 flex items-center border-b border-neutral-bg-3 box-content">
+      <button class="text-base-xs font-bold pb-3 border-b-2 flex justify-center mr-3 translate-y-0.5 transform" :class="differenceSign > -1 ? ' border-light-green' : 'border-red'" disabled><span class="inline-block" :class="differenceSign > -1 ? 'text-light-green' : 'text-red'">1D</span></button>
+      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1W</span></button>
+      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1M</span></button>
+      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1Y</span></button>
+      <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">5Y</span></button>
     </div>
+    <section class="mt-12 dark:text-white">
+      <div v-if="companyInfo">
+          <h2 class="font-medium text-2xl transition-colors ease-linear duration-500 pb-4 border-b border-neutral-bg-3">About</h2>
+          <p class="mt-6 text-base-sm">{{ companyInfo.description || 'Description Not Found' }}</p>
+          <div class="mt-4 flex justify-between">
+            <div class="text-base-xs">
+              <p class="font-bold">CEO</p>
+              <p>{{ companyInfo.CEO || 'Not Found' }}</p>
+            </div>
+            <div class="text-base-xs">
+              <p class="font-bold">Employees</p>
+              <p>{{ companyInfo.employees ? parseInt(companyInfo.employees).toLocaleString() : 'Not Found' }}</p>
+            </div>
+            <div class="text-base-xs">
+              <p class="font-bold">Location</p>
+              <p>{{ companyInfo.city && companyInfo.state ? `${companyInfo.city}, ${companyInfo.state}` : 'Not Found' }}</p>
+            </div>
+            <div class="text-base-xs">
+              <p class="font-bold">Industry</p>
+              <p>{{ companyInfo.industry || 'Not Found' }}</p>
+            </div>
+          </div>
+      </div>
+      <div v-else class="shimmer h-64">
+      </div>
+    </section>
+    <section class="mt-14 dark:text-white">
+      <h2 class="font-medium text-2xl transition-colors ease-linear duration-500 pb-4 border-b border-neutral-bg-3">News</h2>
+      <div v-if="news.length">
+          <article v-for="article in news" class="first:mt-0">
+            <a class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded transition-colors duration-200 ease-linear gap-x-16" :href="article.url" rel="noopener" target="_blank">
+              <div class="w-2/3">
+                <div class="flex text-base-xs">
+                  <p class="font-bold">{{ article.source}}</p>
+                  <p class="text-neutral-fg-2 dark:text-netural-fg-2 pl-1.5">{{ getTimeFromNow(article.datetime) }}</p>
+                </div>
+                <h3 class="font-bold text-base-sm leading-tight">{{ article.headline }}</h3>
+                <p class="text-neutral-fg-2 dark:text-netural-fg-2 text-base-xs truncate">{{ article.summary }}</p>
+              </div>
+              <div class="flex-grow">
+                <div class="aspect-w-4 aspect-h-3">
+                  <img class="object-cover object-center h-full w-full" loading="lazy" :src="article.image" :alt="article.headline">
+                </div>
+              </div>
+            </a>
+          </article>
+      </div>
+      <div v-else class="mt-7">
+        Not found
+      </div>
+    </section>
+
 </template>
 
 <script>
 import { ref, onMounted, computed } from "vue";
 import { projectFunctions } from "@/firebase/config"
+import date from 'date-and-time'
 import { Chart, LineElement, LineController, CategoryScale, LinearScale, PointElement } from 'chart.js'
 Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement)
 export default {
@@ -38,7 +91,7 @@ export default {
     const previousClose = ref(null)
     const intradayPrices = ref(['placeholder'])
     const chart = ref(null)
-    const news = ref([])
+    const news = ref(['placeholder'])
     const companyInfo = ref(null)
     const differenceSign = ref(null)
 
@@ -172,10 +225,27 @@ export default {
         return '&nbsp;'
       }
     })
+
+    const getTimeFromNow = (time) => {
+      const now = new Date();
+      time = new Date(time);
+      let timeFromNow = date.subtract(now, time).toHours()
+      let unit = 'h'
+
+      if (timeFromNow < 1) {
+        timeFromNow = date.subtract(now, time).toMinutes()
+        unit = 'm'
+      } else if (timeFromNow >= 24) {
+        timeFromNow = date.subtract(now, time).toDays()
+        unit = 'd'
+      }
+      return Math.floor(timeFromNow) + unit
+
+    }
     
     
 
-    return { latestPrice, intradayPrices, chart, companyInfo, previousClose, priceChange, differenceSign }
+    return { latestPrice, intradayPrices, chart, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow }
   },
 }
 </script>

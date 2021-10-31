@@ -19,7 +19,7 @@
                     <div class="py-4" v-show="searchIsFocused && resultsReturned">
                         <div v-if="searchResults.length">
                             <div v-for="(stock, index) in searchResults" :key="index" class="hover:bg-border-gray dark:hover:bg-neutral-bg-3 mt-1.5 first:mt-0 -mx-3">
-                            <router-link :to="{ name: 'SingleStock', params: { symbol: stock.symbol } }" class="text-base-xs" @click="searchIsFocused = false">
+                            <router-link :to="{ name: 'SingleStock', params: { symbol: stock.symbol } }" class="text-base-xs">
                             <div class="grid gap-1 grid-cols-12 px-3">
                                 <span class="col-span-2" v-html="stock.symbolHTML"></span>
                                 <span class="col-span-10" v-html="stock.securityName"></span>
@@ -35,20 +35,22 @@
                 </div>
         </div>
       </div>
-      <div class="flex items-center">
-      <div class="text-base-xs">
-          <button @click="toggleDarkMode" class="font-bold">
+      <div class="text-base-xs flex items-center gap-x-8 font-bold">
+          <p>
+              {{ user.email }}
+          </p>
+          <button @click="toggleDarkMode" class="hover:text-green dark:hover:text-red font-bold">
               Dark Mode
           </button>
           <button class="hover:text-green dark:hover:text-red font-bold" @click="logoutUser">
               Log Out
           </button>
       </div>
-      </div>
   </header>
 </template>
 
 <script>
+import { useStore } from 'vuex'
 import { ref } from 'vue'
 import { projectFunctions } from '@/firebase/config'
 import useLogout from '@/composables/useLogout'
@@ -67,9 +69,14 @@ export default {
         const resultsReturned = ref(false)
         const { logout, error, isPending } = useLogout()
 
+        const store = useStore()
+        const user = store.state.user
+
         const logoutUser = async () => {
             await logout()
             if (!error.value) {
+                document.body.classList.remove('dark')
+                store.commit('setUser', null)
                 router.push({name: 'Login'})
             }
         }
@@ -79,6 +86,7 @@ export default {
             clearTimeout(transitionTimeout)
             transitioningToDarkMode.value = true
             document.body.classList.toggle('dark')
+            store.commit('toggleDark')
             transitionTimeout = setTimeout(() => {
                 transitioningToDarkMode.value = false
             }, 1000)
@@ -111,7 +119,7 @@ export default {
                     resultsReturned.value = false
                 }
                 
-            }, 500)
+            }, 100)
         }
 
         const blurInput = () => {
@@ -121,7 +129,7 @@ export default {
         }
 
         
-        return { toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput, logoutUser, resultsReturned }
+        return { user, toggleDarkMode, searchTerm, updateStocks, searchResults, searchIsFocused, transitioningToDarkMode, blurInput, logoutUser, resultsReturned }
     }
 
 }

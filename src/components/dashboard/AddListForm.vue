@@ -6,9 +6,10 @@
             <input required placeholder="List Name" type="text" class="focus:outline-none dark:focus:border-light-green focus:border-light-green dark:border-transparent border-border-gray dark:border-neutral-bg-3 h-9 transition-colors duration-150 w-full rounded py-1 px-2 border text-base-xs bg-transparent" v-model="newListName">
         </div>
     </div>
-    <div class="flex justify-end items-center mt-2">
-        <button type="button" class="rounded font-bold text-base-xs px-5 py-0.5 border-light-green border text-light-green dark:text-light-green transition-colors duration-150 hover:bg-lightest-green" @click="hideForm">Cancel</button>
-        <button type="submit" class="ml-2 rounded bg-light-green font-bold text-base-xs px-5 py-0.5 border-light-green border dark:text-black hover:bg-lighter-green">Create List</button>
+    <div class="flex justify-end items-center mt-2 transition-colors duratoin-200">
+        <button type="button" class="flex items-center justify-center rounded font-bold text-base-xs w-20 h-9 border-light-green border text-light-green dark:text-light-green transition-colors duration-150 hover:bg-lightest-green" @click="hideForm">Cancel</button>
+        <button v-if="!isPending" type="submit" class="flex items-center justify-center ml-2 rounded bg-light-green font-bold text-base-xs w-24 h-9 text-white border-light-green border dark:text-black hover:bg-lighter-green">Create List</button>
+        <button v-else type="submit" class="flex items-center justify-center ml-2 rounded bg-light-green font-bold text-base-xs w-24 h-9 text-white border-light-green border dark:text-black hover:bg-lighter-green" disabled><img class="w-10" :src="require('@/assets/img/auth/spinner.svg')"></button>
     </div>
     </form>
     <p v-if="error" class="px-5 mt-1 text-base-xs font-bold text-red">{{ error }}</p>
@@ -44,7 +45,7 @@ export default {
                     title: newListName.value,
                     emoji: emoji.value,
                     userId: store.state.user.uid,
-                    stocks: [],
+                    stocks: ['HUBS'],
                     createdAt: timestamp()
                 })
                 isPending.value = false
@@ -88,7 +89,7 @@ export default {
         
 
 
-        return { newListName, hideForm, toggleEmojiPicker, emojiTrigger, emoji, error, handleAdd }
+        return { newListName, hideForm, toggleEmojiPicker, emojiTrigger, emoji, error, handleAdd, isPending }
     }
 }
 </script>

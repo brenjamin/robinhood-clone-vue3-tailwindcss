@@ -7,7 +7,7 @@
       <div class="w-2/3">
         <router-view :key="$route.path" />
       </div>
-      <div class="w-1/3 sticky top-24 pl-24">
+      <div class="w-1/3 sticky top-24 pl-18">
         <Lists />
       </div>
     </div>
@@ -43,7 +43,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .dashboard-wrapper {
   width: 1024px;
 }
@@ -53,4 +53,24 @@ body.dark {
 #app, button, a, h2 {
  @apply dark:text-white;
 }
+.shimmer {
+        animation : shimmer 4s infinite linear;
+        background-image: linear-gradient(to right, #f2f2f2 0%, #E8E8E8 50%, #f2f2f2 100%);
+        background-size: 250px 100%;
+        @apply rounded-md;
+    }
+
+    .dark .shimmer {
+      background-image: linear-gradient(to right, rgb(121,133,139) 0%, rgb(48,54,58) 50%, rgb(121,133,139) 100%);
+
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -500px 0;
+        }
+        100% {
+            background-position: 500px 0;
+        }
+    }
 </style>

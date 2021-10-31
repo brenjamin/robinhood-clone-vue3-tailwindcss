@@ -1,5 +1,5 @@
 <template>
-    <div class="dark:text-white duration-1000 transition-colors ease-linear">
+    <div class="dark:text-white duration-1000 transition-colors eas e-linear">
       <h1 v-if="companyInfo" class="text-2.5xl">{{ companyInfo.companyName }}</h1>
       <h1 v-else class="text-2.5xl shimmer w-80">&nbsp;</h1>
       <p v-if="latestPrice" class="text-2.5xl font-medium mt-1.5">${{ latestPrice.toFixed(2) }}</p>
@@ -10,7 +10,7 @@
     <!-- <p v-for="(item, index) in intradayPrices" :key="index" class="px-1 inline-block">
       {{ item.average || 'none' }}
     </p> -->
-    <div :class="intradayPrices.length > 1 ? 'mt-3' : 'mt-3 h-80'">
+    <div class="relative" :class="intradayPrices.length > 1 ? 'mt-3' : 'mt-3 h-80'">
       <canvas id="chart" ref="chart" v-show="intradayPrices.length"></canvas>
       <p v-if="!intradayPrices.length">Price data not available</p>
     </div>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { projectFunctions } from "@/firebase/config"
 import date from 'date-and-time'
 import { Chart, LineElement, LineController, CategoryScale, LinearScale, PointElement } from 'chart.js'
@@ -150,10 +150,36 @@ export default {
       const intraDayChart = new Chart(chart.value, config);
     }
 
-    onMounted( () => {
+    const priceChange = computed(() => {
+      if (latestPrice.value && previousClose.value) {
+        let diff = parseFloat(latestPrice.value) - parseFloat(previousClose.value)
+        let sign = Math.sign(diff) > -1 ? '+' : '-'
+        diff = Math.abs(diff).toFixed(2)
+        let percent = parseFloat(Math.abs((diff / previousClose.value * 100))).toFixed(2)
+        return sign + '$' + diff + ' (' + sign + percent + '%)'
+      } else {
+        return '&nbsp;'
+      }
+    })
 
+    const getTimeFromNow = (time) => {
+      const now = new Date();
+      time = new Date(time);
+      let timeFromNow = date.subtract(now, time).toHours()
+      let unit = 'h'
 
-      const getCompanyInfo = async () => {
+      if (timeFromNow < 1) {
+        timeFromNow = date.subtract(now, time).toMinutes()
+        unit = 'm'
+      } else if (timeFromNow >= 24) {
+        timeFromNow = date.subtract(now, time).toDays()
+        unit = 'd'
+      }
+      return Math.floor(timeFromNow) + unit
+
+    }
+
+     const getCompanyInfo = async () => {
         let result = await getStock(`stock/${props.symbol}/company`)
         companyInfo.value = JSON.parse(result.data)
       }
@@ -207,63 +233,17 @@ export default {
       }
 
       const getAllInfo = async () => {
-        await Promise.all([getCompanyInfo(), getNews(), getIntradayPrices(), getQuote()])
+        await Promise.all([getCompanyInfo(), getNews(), getIntradayPrices()])
       }
-
+    
+      getQuote();
       getAllInfo();
-
-    })
-
-    const priceChange = computed(() => {
-      if (latestPrice.value && previousClose.value) {
-        let diff = parseFloat(latestPrice.value) - parseFloat(previousClose.value)
-        let sign = Math.sign(diff) > -1 ? '+' : '-'
-        diff = Math.abs(diff).toFixed(2)
-        let percent = parseFloat(Math.abs((diff / previousClose.value * 100))).toFixed(2)
-        return sign + '$' + diff + ' (' + sign + percent + '%)'
-      } else {
-        return '&nbsp;'
-      }
-    })
-
-    const getTimeFromNow = (time) => {
-      const now = new Date();
-      time = new Date(time);
-      let timeFromNow = date.subtract(now, time).toHours()
-      let unit = 'h'
-
-      if (timeFromNow < 1) {
-        timeFromNow = date.subtract(now, time).toMinutes()
-        unit = 'm'
-      } else if (timeFromNow >= 24) {
-        timeFromNow = date.subtract(now, time).toDays()
-        unit = 'd'
-      }
-      return Math.floor(timeFromNow) + unit
-
-    }
-    
-    
 
     return { latestPrice, intradayPrices, chart, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow }
   },
 }
 </script>
 
-<style scoped>
-  .shimmer {
-        animation : shimmer 4s infinite linear;
-        background-image: linear-gradient(to right, #f2f2f2 0%, #E8E8E8 50%, #f2f2f2 100%);
-        background-size: 250px 100%;
-        @apply rounded-md;
-    }
-
-    @keyframes shimmer {
-        0% {
-            background-position: -500px 0;
-        }
-        100% {
-            background-position: 500px 0;
-        }
-    }
+<style>
+  
 </style>

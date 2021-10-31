@@ -20,11 +20,12 @@
             </button>
             <div v-if="error" class="text-red mt-4">{{ error }}</div>
         </form>
+        <router-link :to="{ name: 'Login' }" class="block text-green font-medium text-base-xs mt-8">Already have an account? Sign in.</router-link>
         <div class="hidden md:block text-fine-print leading-relaxed mt-25">
           <p>All investments involve risk, including the possible loss of principal. Investors should consider their investment objectives and risks carefully before investing.</p>
-          <p class="mt-4">Commission-free trading means $0 commission trading on self-directed individual cash or margin brokerage accounts that trade U.S. listed securities via mobile devices or web. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s <a href>fee schedule</a> to learn more.</p>
+          <p class="mt-4">Commission-free trading means $0 commission trading on self-directed individual cash or margin brokerage accounts that trade U.S. listed securities via mobile devices or web. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s <a href class="text-green text-inherit font-medium">fee schedule</a> to learn more.</p>
           <p class="mt-4">Securities trading offered through Robinhood Financial LLC. Brokerage clearing services offered through Robinhood Securities, LLC. Both are subsidiaries of Robinhood Markets, Inc.</p>
-          <p class="mt-4"><a href>Check the background of Robinhood Financial LLC and Robinhood Securities, LLC on FINRA’s BrokerCheck.</a></p>
+          <p class="mt-4"><a href class="text-green text-inherit font-medium">Check the background of Robinhood Financial LLC and Robinhood Securities, LLC on FINRA’s BrokerCheck.</a></p>
           <p class="mt-4 text-green font-medium">Robinhood Terms & Conditions  Disclosure Library  Contact Us  FAQ</p>
           <p class="mt-4">© 2020 Robinhood. All rights reserved.</p>
         </div>
@@ -39,9 +40,9 @@
       </div>
       <div class="md:hidden text-fine-print leading-relaxed mt-20">
           <p>All investments involve risk, including the possible loss of principal. Investors should consider their investment objectives and risks carefully before investing.</p>
-          <p class="mt-4">Commission-free trading means $0 commission trading on self-directed individual cash or margin brokerage accounts that trade U.S. listed securities via mobile devices or web. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s <a href>fee schedule</a> to learn more.</p>
+          <p class="mt-4">Commission-free trading means $0 commission trading on self-directed individual cash or margin brokerage accounts that trade U.S. listed securities via mobile devices or web. Keep in mind, other fees such as trading (non-commission) fees, Gold subscription fees, wire transfer fees, and paper statement fees may apply to your brokerage account. Please see Robinhood Financial’s <a href class="text-green text-inherit font-medium">fee schedule</a> to learn more.</p>
           <p class="mt-4">Securities trading offered through Robinhood Financial LLC. Brokerage clearing services offered through Robinhood Securities, LLC. Both are subsidiaries of Robinhood Markets, Inc.</p>
-          <p class="mt-4"><a href>Check the background of Robinhood Financial LLC and Robinhood Securities, LLC on FINRA’s BrokerCheck.</a></p>
+          <p class="mt-4"><a href class="text-green text-inherit font-medium">Check the background of Robinhood Financial LLC and Robinhood Securities, LLC on FINRA’s BrokerCheck.</a></p>
           <p class="mt-4 text-green font-medium">Robinhood Terms & Conditions  Disclosure Library  Contact Us  FAQ</p>
           <p class="mt-4">© 2020 Robinhood. All rights reserved.</p>
         </div>
@@ -94,9 +95,6 @@ export default {
 </script>
 
 <style scoped>
-a[href] {
-  @apply text-green text-inherit font-medium;
-}
 @screen md {
   .left {
     padding-right: 10%;

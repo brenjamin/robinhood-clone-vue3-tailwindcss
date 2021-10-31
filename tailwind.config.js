@@ -28,6 +28,7 @@ module.exports = {
         'fine-print': 'rgb(180, 189, 194)',
         'inherit': 'inherit',
         'neutral-bg-3': 'rgb(48,54,58)',
+        'netural-bg-2': 'rgb(64,73,78)',
         'netural-fg-2': 'rgb(145,159,166)'
       },
       fontSize: {

@@ -4,7 +4,7 @@ node_modules
 src/firebase
 .firebase
 .env
-functions
+ui-debug.log
 
 
 # local env files

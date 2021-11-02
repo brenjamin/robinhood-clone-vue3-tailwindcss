@@ -3,11 +3,11 @@
     <DashboardNav />
     <div class="h-16">
     </div>
-    <div class="dashboard-wrapper mx-auto py-9 flex items-start">
+    <div class="dashboard-wrapper mx-auto py-9 flex items-start relative" :class="listModalIsOpen ? 'z-100' : ''">
       <div class="w-2/3">
         <router-view :key="$route.path" />
       </div>
-      <div class="w-1/3 sticky top-24 pl-18">
+      <div class="w-1/3 sticky top-28 pl-18">
         <Lists />
       </div>
     </div>
@@ -17,7 +17,7 @@
 <script>
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import DashboardNav from '@/components/dashboard/DashboardNav'
 import Lists from '@/components/dashboard/Lists'
 export default {
@@ -29,14 +29,18 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+    console.log(store.state)
     if (store.state.dark) {
       document.body.classList.add('dark')
     }
-    
-    console.log(router.currentRoute.value)
+
     const symbol = router.currentRoute.params ? ref(router.currentRoute.params.symbol) : 'random'
 
-    return { symbol, router }
+    const listModalIsOpen = computed(() => { 
+      return store.state.listModalIsOpen
+    })
+
+    return { symbol, router, listModalIsOpen }
   }
 
   

@@ -45,7 +45,7 @@ export default {
                     title: newListName.value,
                     emoji: emoji.value,
                     userId: store.state.user.uid,
-                    stocks: ['HUBS'],
+                    stocks: ['HUBS', 'F', 'MSFT'],
                     createdAt: timestamp()
                 })
                 isPending.value = false
@@ -99,7 +99,7 @@ export default {
     @apply top-1.25;
 }
 
-.dark .emoji-picker {
+.dark .emoji-picker, .dark .emoji-picker__variant-popup {
     @apply bg-black;
 }
 .dark .emoji-picker input {

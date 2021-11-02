@@ -119,7 +119,7 @@ export default {
                     resultsReturned.value = false
                 }
                 
-            }, 100)
+            }, 50)
         }
 
         const blurInput = () => {

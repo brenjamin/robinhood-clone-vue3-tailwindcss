@@ -54,6 +54,8 @@
 import useSignup from '@/composables/useSignup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
 export default {
   name: "Signup",
   setup() {
@@ -63,11 +65,13 @@ export default {
     const password = ref('')
 
     const router = useRouter()
+    const store = useStore()
 
 
     const handleSubmit = async () => {
         const res = await signup(email.value, password.value)
         if (!error.value) {
+            store.commit('setUser', res.user)
             router.push({ name: 'Dashboard'})
         }
     }

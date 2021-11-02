@@ -55,10 +55,10 @@
               <div class="w-2/3">
                 <div class="flex text-base-xs">
                   <p class="font-bold">{{ article.source}}</p>
-                  <p class="text-neutral-fg-2 dark:text-netural-fg-2 pl-1.5">{{ getTimeFromNow(article.datetime) }}</p>
+                  <p class="text-neutral-fg-2 dark:text-neutral-fg-2 pl-1.5">{{ getTimeFromNow(article.datetime) }}</p>
                 </div>
                 <h3 class="font-bold text-base-sm leading-tight">{{ article.headline }}</h3>
-                <p class="text-neutral-fg-2 dark:text-netural-fg-2 text-base-xs truncate">{{ article.summary }}</p>
+                <p class="text-neutral-fg-2 dark:text-neutral-fg-2 text-base-xs truncate">{{ article.summary }}</p>
               </div>
               <div class="flex-grow">
                 <div class="aspect-w-4 aspect-h-3">
@@ -235,9 +235,15 @@ export default {
       const getAllInfo = async () => {
         await Promise.all([getCompanyInfo(), getNews(), getIntradayPrices()])
       }
+
+      const start = async() => {
+        await getQuote();
+        getAllInfo();
+      }
+      
+      start();
     
-      getQuote();
-      getAllInfo();
+      
 
     return { latestPrice, intradayPrices, chart, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow }
   },

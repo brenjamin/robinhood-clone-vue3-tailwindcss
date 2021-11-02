@@ -6,7 +6,8 @@ const store = createStore({
     state() {
         return {
             user: null,
-            dark: false
+            dark: false,
+            listModalIsOpen: false
         }
     },
     mutations: {
@@ -15,9 +16,14 @@ const store = createStore({
         },
         toggleDark(state) {
             state.dark = !state.dark
+        },
+        toggleListModal(state) {
+            state.listModalIsOpen = !state.listModalIsOpen
         }
     },
-    plugins: [createPersistedState()]
+    plugins: [createPersistedState({
+        paths: ['dark']
+    })]
 })
 
 export default store

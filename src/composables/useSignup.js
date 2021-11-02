@@ -1,6 +1,8 @@
 import { ref } from "vue"
 import { projectAuth } from "../firebase/config"
 import  { projectFirestore } from '../firebase/config'
+import { timestamp } from '@/firebase/config'
+
 
 const error = ref(null)
 const isPending = ref(false)
@@ -14,14 +16,19 @@ const signup = async (email, password) => {
         if (!res) {
             throw new Error('Could not complete the signup')
         }
-        console.log(res.user)
 
         var userUid = projectAuth.currentUser.uid;
 
-        await projectFirestore.collection('users').doc(userUid).set({
-            email,
-            password
-        });
+        const startingList = {
+            title: 'FAANG',
+            emoji: 128526,
+            userId: userUid,
+            stocks: ['FB', 'AAPL', 'AMZN', 'NFLX', 'GOOGL'],
+            createdAt: timestamp()
+        }
+        
+        await projectFirestore.collection('lists').add(startingList)
+        
 
         error.value = null
         isPending.value = false

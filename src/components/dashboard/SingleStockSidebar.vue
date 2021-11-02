@@ -2,11 +2,12 @@
     <router-link :to="{ name: 'SingleStock', params: {symbol: stock } }" class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-border-gray dark:hover:bg-neutral-bg-3">
         <p>{{ stock }}</p>
         <div class="relative w-16">
-            <canvas ref="chart"></canvas>
+            <canvas v-show="loaded" ref="chart"></canvas>
+            <div v-if="!loaded" class="h-9"></div>
         </div>
         <div class="flex flex-col items-end font-normal" v-if="latestPrice && previousClose">
             <p v-if="latestPrice" class="text-base-xs leading-tight">${{ latestPrice.toFixed(2) }}</p>
-            <p class="mt-1 text-base-xs leading-tight" :class="differenceSign.value > -1 ? 'text-light-green' : 'text-red'" v-html="priceChange"></p>
+            <p class="mt-1 text-base-xs leading-tight" :class="differenceSign > -1 ? 'text-light-green' : 'text-red'" v-html="priceChange"></p>
         </div>
     </router-link>
 </template>
@@ -27,6 +28,7 @@ export default {
     const intradayPrices = ref(['placeholder'])
     const chart = ref(null)
     const differenceSign = ref(null)
+    const loaded = ref(false)
 
     const initializeChart = rawData => {
       const prices = rawData.map(time => time.average)
@@ -100,6 +102,7 @@ export default {
         latestPrice.value = data.latestPrice
         previousClose.value = data.previousClose
         differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
+        console.log(differenceSign.value)
       }
 
       const getIntradayPrices = async () => {
@@ -126,21 +129,28 @@ export default {
               return index % 5 === 0
             })
             initializeChart(intradayPrices.value)
+            loaded.value = true
 
           } else {
             intradayPrices.value = []
+            loaded.value = true
           }
         } catch(err) {
           intradayPrices.value = []
+          loaded.value = true
         }
         
         
       }
     
-      getQuote();
-      getIntradayPrices();
+      const start = async() => {
+        await getQuote();
+        getIntradayPrices();
+      }
+      
+      start();
 
-    return { latestPrice, intradayPrices, chart, previousClose, priceChange, differenceSign }
+    return { latestPrice, intradayPrices, chart, previousClose, priceChange, differenceSign, loaded }
     }
 }
 </script>

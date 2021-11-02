@@ -28,8 +28,8 @@ module.exports = {
         'fine-print': 'rgb(180, 189, 194)',
         'inherit': 'inherit',
         'neutral-bg-3': 'rgb(48,54,58)',
-        'netural-bg-2': 'rgb(64,73,78)',
-        'netural-fg-2': 'rgb(145,159,166)'
+        'neutral-bg-2': 'rgb(64,73,78)',
+        'neutral-fg-2': 'rgb(145,159,166)'
       },
       fontSize: {
         'inherit': 'inherit',
@@ -61,6 +61,7 @@ module.exports = {
         '34': '8.5rem',
         '75': '18.75rem',
         '100': '25rem',
+        '110': '27.5rem',
         '120': '30rem',
         '128': '32rem',
         '146': '36.5rem'
@@ -88,7 +89,8 @@ module.exports = {
         'xxs': '16.625rem'
       },
       boxShadow: {
-        'input': '0px 12px 24px rgba(0,0,0,0.06), 0px -12px 24px rgba(0,0,0,0.06)'
+        'input': '0px 12px 24px rgba(0,0,0,0.06), 0px -12px 24px rgba(0,0,0,0.06)',
+        'list-menu': '0px 12px 24px rgba(0,0,0,0.6), 0px -12px 24px rgba(0,0,0,0.02)'
       }
     },
   },

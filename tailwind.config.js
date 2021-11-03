@@ -24,6 +24,7 @@ module.exports = {
         'border-gray-dark': 'rgb(121,133,139)',
         'border-gray-light': 'rgb(84, 93, 97)',
         'red': 'rgb(255, 80, 0)',
+        'light-red': 'rgb(255,106,38)',
         'blue': 'rgb(0, 127, 245)',
         'fine-print': 'rgb(180, 189, 194)',
         'inherit': 'inherit',
@@ -98,7 +99,8 @@ module.exports = {
     extend: {
       margin: ['responsive', 'first', 'last'],
       padding: ['responsive', 'first', 'last'],
-      borderWidth: ['responsive', 'dark']
+      borderWidth: ['responsive', 'dark'],
+      boxShadow: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus', 'dark']
     },
   },
   plugins: [

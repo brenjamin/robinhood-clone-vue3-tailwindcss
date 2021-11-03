@@ -47,7 +47,6 @@ export default {
         }
 
         const handleClose = () => {
-            console.log('close')
             modalIsOpen.value = false
             document.documentElement.style.overflow = 'scroll'
             document.body.scroll = 'yes'

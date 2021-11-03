@@ -13,7 +13,6 @@ const login = async (email, password) => {
         isPending.value = false
         return res
     } catch(err) {
-        console.log(err.message)
         isPending.value = false
         error.value = err.message
     }

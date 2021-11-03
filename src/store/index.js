@@ -7,7 +7,9 @@ const store = createStore({
         return {
             user: null,
             dark: false,
-            listModalIsOpen: false
+            listModalIsOpen: false,
+            activeList: null,
+            editOrDeleteList: ''
         }
     },
     mutations: {
@@ -17,8 +19,17 @@ const store = createStore({
         toggleDark(state) {
             state.dark = !state.dark
         },
-        toggleListModal(state) {
-            state.listModalIsOpen = !state.listModalIsOpen
+        openListModal(state) {
+            state.listModalIsOpen = true
+        },
+        closeListModal(state) {
+            state.listModalIsOpen = false
+        },
+        updateActiveList(state, list = null) {
+            state.activeList = list
+        },
+        updateModifyMode(state, mode = '') {
+            state.editOrDeleteList = mode
         }
     },
     plugins: [createPersistedState({

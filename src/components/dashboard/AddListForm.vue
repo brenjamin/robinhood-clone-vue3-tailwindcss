@@ -31,7 +31,6 @@ export default {
         const { error, addDoc } = useCollection('lists')
         const isPending = ref(false)
         const store = useStore()
-        console.log(store.state.user.uid)
 
         const hideForm = () => {
             context.emit('closeForm')
@@ -64,7 +63,8 @@ export default {
             '--font': 'Capsule Sans Text',
             '--blue-color': 'rgb(0, 200, 5)'
             },
-            position: 'left-start'
+            position: 'left-start',
+            showVariants: false
         })
 
         

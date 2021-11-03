@@ -53,7 +53,6 @@ export default {
 
     const store = useStore()
 
-    console.log(store.state.user)
     
 
     const handleClick = () => {
@@ -62,10 +61,8 @@ export default {
 
     const handleSubmit = async () => {
       const res = await login(email.value, password.value)
-      console.log(res.user)
       if (!error.value) {
           store.commit('setUser', res.user)
-          console.log(store.state.user)
           router.push({ name: 'Dashboard'})
       }
     }

@@ -3,7 +3,7 @@
     <DashboardNav />
     <div class="h-16">
     </div>
-    <div class="dashboard-wrapper mx-auto py-9 flex items-start relative" :class="listModalIsOpen ? 'z-100' : ''">
+    <div class="dashboard-wrapper mx-auto py-9 flex items-start relative">
       <div class="w-2/3">
         <router-view :key="$route.path" />
       </div>
@@ -11,6 +11,7 @@
         <Lists />
       </div>
     </div>
+    <ListModal />
   </div>
 </template>
 
@@ -20,27 +21,22 @@ import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import DashboardNav from '@/components/dashboard/DashboardNav'
 import Lists from '@/components/dashboard/Lists'
+import ListModal from '@/components/dashboard/ListModal'
 export default {
   name: 'Dashboard',
   components: {
     DashboardNav,
-    Lists
+    Lists,
+    ListModal
   },
   setup() {
     const store = useStore()
-    const router = useRouter()
-    console.log(store.state)
+
     if (store.state.dark) {
       document.body.classList.add('dark')
     }
 
-    const symbol = router.currentRoute.params ? ref(router.currentRoute.params.symbol) : 'random'
-
-    const listModalIsOpen = computed(() => { 
-      return store.state.listModalIsOpen
-    })
-
-    return { symbol, router, listModalIsOpen }
+    return { }
   }
 
   
@@ -50,6 +46,8 @@ export default {
 <style>
 .dashboard-wrapper {
   width: 1024px;
+  transition-property: z-index;
+  transition-duration: 1s;
 }
 body.dark {
   @apply bg-black duration-1000 ease-linear transition-colors;

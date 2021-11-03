@@ -21,7 +21,7 @@ const signup = async (email, password) => {
 
         const startingList = {
             title: 'FAANG',
-            emoji: 128526,
+            emoji: '128406',
             userId: userUid,
             stocks: ['FB', 'AAPL', 'AMZN', 'NFLX', 'GOOGL'],
             createdAt: timestamp()
@@ -35,7 +35,6 @@ const signup = async (email, password) => {
         
         return res
     } catch(err) {
-        console.log(err.message)
         error.value = err.message
         isPending.value = false
     }

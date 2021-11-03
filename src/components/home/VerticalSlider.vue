@@ -76,7 +76,6 @@ export default {
             clearInterval(interval)
             transitionNext.value = index > activeSlide.value ? true : false
             activeSlide.value = index
-            console.log(activeSlide.value)
         }
 
         const handlePrev = () => {

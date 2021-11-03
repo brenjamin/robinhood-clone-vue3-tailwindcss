@@ -1,9 +1,11 @@
 <template>
-    <router-link :to="{ name: 'SingleStock', params: {symbol: stock } }" class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-border-gray dark:hover:bg-neutral-bg-3">
+    <router-link :to="{ name: 'SingleStock', params: {symbol: stock } }" class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-light-gray dark:hover:bg-neutral-bg-3">
         <p>{{ stock }}</p>
         <div class="relative w-16">
-            <canvas v-show="loaded" ref="chart"></canvas>
+            <canvas v-show="loaded && intradayPrices.length" ref="chart"></canvas>
             <div v-if="!loaded" class="h-9"></div>
+            <p class="text-base-xs font-normal" v-if="loaded && !intradayPrices.length">No data</p>
+
         </div>
         <div class="flex flex-col items-end font-normal" v-if="latestPrice && previousClose">
             <p v-if="latestPrice" class="text-base-xs leading-tight">${{ latestPrice.toFixed(2) }}</p>
@@ -102,7 +104,6 @@ export default {
         latestPrice.value = data.latestPrice
         previousClose.value = data.previousClose
         differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
-        console.log(differenceSign.value)
       }
 
       const getIntradayPrices = async () => {

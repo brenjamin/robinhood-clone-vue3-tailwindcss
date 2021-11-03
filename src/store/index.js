@@ -9,7 +9,8 @@ const store = createStore({
             dark: false,
             listModalIsOpen: false,
             activeList: null,
-            editOrDeleteList: ''
+            editOrDeleteList: '',
+            showNotification: false
         }
     },
     mutations: {
@@ -30,6 +31,12 @@ const store = createStore({
         },
         updateModifyMode(state, mode = '') {
             state.editOrDeleteList = mode
+        },
+        showNotification(state) {
+            state.showNotification = true
+        },
+        hideNotification(state) {
+            state.showNotification = false
         }
     },
     plugins: [createPersistedState({

@@ -12,6 +12,7 @@
       </div>
     </div>
     <ListModal />
+    <NotificationBanner v-if="showNotification" />
   </div>
 </template>
 
@@ -22,12 +23,14 @@ import { ref, computed } from 'vue'
 import DashboardNav from '@/components/dashboard/DashboardNav'
 import Lists from '@/components/dashboard/Lists'
 import ListModal from '@/components/dashboard/ListModal'
+import NotificationBanner from '@/components/dashboard/NotificationBanner'
 export default {
   name: 'Dashboard',
   components: {
     DashboardNav,
     Lists,
-    ListModal
+    ListModal,
+    NotificationBanner
   },
   setup() {
     const store = useStore()
@@ -36,7 +39,11 @@ export default {
       document.body.classList.add('dark')
     }
 
-    return { }
+    const showNotification = computed(() => {
+        return store.state.showNotification
+    })
+
+    return { showNotification }
   }
 
   

@@ -89,6 +89,7 @@ export default {
         const handleDelete = async () => {
             await deleteDoc(activeList.value.id)
             afterUpdate()
+            store.commit('showNotification')
         }
 
         const handleUpdate = async () => {
@@ -142,7 +143,7 @@ export default {
     }
 
     .slide-fade-enter-active, .slide-fade-leave-active {
-      @apply transition-all duration-500;
+      @apply transition-all duration-300;
     }
 
     .fade-enter-from {
@@ -150,7 +151,7 @@ export default {
     }
 
     .fade-enter-active, .fade-leave-active {
-    @apply transition-all duration-300 
+    @apply transition-all duration-200 
     }
 
 </style>

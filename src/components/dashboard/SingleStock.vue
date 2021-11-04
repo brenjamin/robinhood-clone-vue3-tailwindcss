@@ -78,6 +78,7 @@
 <script>
 import { ref, computed } from "vue";
 import { projectFunctions } from "@/firebase/config"
+import { useStore } from 'vuex'
 import date from 'date-and-time'
 import { Chart, LineElement, LineController, CategoryScale, LinearScale, PointElement } from 'chart.js'
 Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement)
@@ -94,6 +95,7 @@ export default {
     const news = ref(['placeholder'])
     const companyInfo = ref(null)
     const differenceSign = ref(null)
+    const state = useStore()
 
     const initializeChart = rawData => {
       const prices = rawData.map(time => time.average)
@@ -237,6 +239,7 @@ export default {
       }
 
       const start = async() => {
+        state.commit('setActiveStock', props.symbol)
         await getQuote();
         getAllInfo();
       }

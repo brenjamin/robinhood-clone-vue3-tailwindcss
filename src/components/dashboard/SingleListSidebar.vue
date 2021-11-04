@@ -60,6 +60,7 @@ export default {
         })
 
         const prepareToDelete = () => {
+            store.commit('hideNotification')
             store.commit('updateActiveList', props.list)
             store.commit('updateModifyMode', 'delete')
             store.commit('openListModal')
@@ -68,6 +69,7 @@ export default {
         }
 
         const prepareToEdit = () => {
+            store.commit('hideNotification')
             store.commit('updateActiveList', props.list)
             store.commit('updateModifyMode', 'edit')
             store.commit('openListModal')

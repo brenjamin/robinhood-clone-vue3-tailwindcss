@@ -108,4 +108,7 @@ export default {
 .dark .emoji-picker h2, .dark .emoji-picker input {
     @apply text-white;
 }
+.dark .emoji-picker__emoji:focus, .emoji-picker__emoji:hover {
+    @apply bg-neutral-bg-3;
+}
 </style>

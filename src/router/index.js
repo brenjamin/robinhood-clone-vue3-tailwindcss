@@ -43,7 +43,8 @@ const routes = [
   {
     path: '/signup',
     name: 'Signup',
-    component: Signup
+    component: Signup,
+    beforeEnter: autoLogin
   },
   {
     path: '/signup-free-stock',

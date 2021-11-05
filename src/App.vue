@@ -6,7 +6,6 @@
 #app, button, a, h2 {
   font-family: 'Capsule Sans Text', Helvetica, Arial, sans-serif;
   letter-spacing: -0.1px;
-  @apply text-base-sm text-black dark:text-white;
 }
 
 @screen md {

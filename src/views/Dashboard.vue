@@ -53,12 +53,14 @@ export default {
 <style>
 .dashboard-wrapper {
   width: 1024px;
-  transition-property: z-index;
-  transition-duration: 1s;
+}
+body.dark, body {
+   @apply ease-linear;
 }
 body.dark {
-  @apply bg-black duration-1000 ease-linear transition-colors;
+  @apply bg-black
 }
+
 #app, button, a, h2 {
  @apply dark:text-white;
 }

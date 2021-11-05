@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between z-50 fixed inset-x-0 h-16 px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black transiton-all duration-1000 ease-linear">
+  <header class="flex justify-between z-50 fixed inset-x-0 h-16 px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black transition-all duration-1000 ease-linear">
       <div class="flex lg:w-3/5 xl:w-1/2 flex-grow">
         <div class="flex items-center">
             <div class="hover:text-green dark:hover:text-red">
@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="mt-3.5 mx-3 sm:mx-6 xl:w-full xl:max-w-screen-lg xl:fixed xl:transform xl:-translate-x-1/2 xl:left-1/2 z-50 flex-grow">
-            <div class="flex-grow w-full md:w-120 max-w-full px-3 text-base-xs border border-solid bg-white border-border-gray focus-within:border-transparent hover:border-transparent hover:shadow-input focus-within:shadow-input  dark:bg-black dark:focus-within:bg-dark-bg-gray dark:border-neutral-bg-3 dark:hover:bg-dark-bg-gray rounded transition-all" :class="transitioningToDarkMode ? 'duration-1000' : 'duration-200'">
+            <div class="flex-grow w-full md:w-120 max-w-full px-3 text-base-xs border border-solid bg-white border-border-gray focus-within:border-transparent hover:border-transparent hover:shadow-input focus-within:shadow-input  dark:bg-black dark:focus-within:bg-dark-bg-gray dark:border-neutral-bg-3 dark:hover:bg-dark-bg-gray rounded transition-all" :class="transitioningToDarkMode ? 'duration-1000 ease-linear' : 'duration-200'">
                     <div class="flex items-center">
                         <div class="mr-2" :class="searchIsFocused ? 'text-black dark:text-white' : 'text-text-gray dark:text-text-gray-light' ">
                             <svg role="img" viewBox="0 0 24 24" class="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M15.3201 16.7344C14.0741 17.5354 12.5913 18 11 18C6.58172 18 3 14.4183 3 10C3 5.58172 6.58172 2 11 2C15.4183 2 19 5.58172 19 10C19 12.1038 18.1879 14.0179 16.8601 15.446L21.7071 20.293L20.2928 21.7072L15.3201 16.7344ZM17 10C17 13.3137 14.3137 16 11 16C7.68629 16 5 13.3137 5 10C5 6.68629 7.68629 4 11 4C14.3137 4 17 6.68629 17 10Z" fill-rule="evenodd"></path></svg>

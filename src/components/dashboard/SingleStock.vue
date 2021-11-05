@@ -1,15 +1,11 @@
 <template>
-    <div class="dark:text-white duration-1000 transition-colors eas e-linear">
-      <h1 v-if="companyInfo" class="text-2.5xl">{{ companyInfo.companyName }}</h1>
+    <div class="dark:text-white duration-1000 transition-colors ease-linear">
+      <h1 v-if="companyInfo" class="text-2.5xl ">{{ companyInfo.companyName }}</h1>
       <h1 v-else class="text-2.5xl shimmer w-80">&nbsp;</h1>
       <p v-if="latestPrice" class="text-2.5xl font-medium mt-1.5">${{ latestPrice.toFixed(2) }}</p>
       <p v-else class="text-2.5xl shimmer w-40 font-medium mt-1">&nbsp;</p>
       <p class="mt-1 text-base-xs font-semibold" v-html="priceChange" :class="latestPrice && previousClose ? '' : 'shimmer w-16' "></p>
     </div>
-    
-    <!-- <p v-for="(item, index) in intradayPrices" :key="index" class="px-1 inline-block">
-      {{ item.average || 'none' }}
-    </p> -->
     <div class="relative" :class="intradayPrices.length > 1 ? 'mt-3' : 'mt-3 h-80'">
       <canvas id="chart" ref="chart" v-show="intradayPrices.length"></canvas>
       <p v-if="!intradayPrices.length">Price data not available</p>
@@ -23,8 +19,8 @@
     </div>
     <section class="mt-12 dark:text-white">
       <div v-if="companyInfo">
-          <h2 class="font-medium text-2xl transition-colors ease-linear duration-500 pb-4 border-b border-neutral-bg-3">About</h2>
-          <p class="mt-6 text-base-sm">{{ companyInfo.description || 'Description Not Found' }}</p>
+          <h2 class="font-medium text-2xl pb-4 border-b border-neutral-bg-3 duration-1000 ease-linear transition-colors">About</h2>
+          <p class="mt-6 text-base-sm duration-1000 ease-linear transition-colors;">{{ companyInfo.description || 'Description Not Found' }}</p>
           <div class="mt-4 flex justify-between">
             <div class="text-base-xs">
               <p class="font-bold">CEO</p>
@@ -48,9 +44,9 @@
       </div>
     </section>
     <section class="mt-14 dark:text-white">
-      <h2 class="font-medium text-2xl transition-colors ease-linear duration-500 pb-4 border-b border-neutral-bg-3">News</h2>
+      <h2 class="font-medium text-2xl transition-colors ease-linear duration-1000 pb-4 border-b border-neutral-bg-3">News</h2>
       <div v-if="news.length">
-          <article v-for="article in news" class="first:mt-0">
+          <article v-for="article in news" class="first:mt-0 transition-colors ease-linear duration-1000">
             <a class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded transition-colors duration-200 ease-linear gap-x-16" :href="article.url" rel="noopener" target="_blank">
               <div class="w-2/3">
                 <div class="flex text-base-xs">
@@ -80,8 +76,10 @@ import { ref, computed } from "vue";
 import { projectFunctions } from "@/firebase/config"
 import { useStore } from 'vuex'
 import date from 'date-and-time'
-import { Chart, LineElement, LineController, CategoryScale, LinearScale, PointElement } from 'chart.js'
-Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement)
+import { Chart, LineElement, LineController, CategoryScale, LinearScale, PointElement, Tooltip } from 'chart.js'
+Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement, Tooltip)
+const convertTime = require('convert-time');
+
 export default {
   name: "SingleStock",
   props: ["symbol"],
@@ -97,25 +95,68 @@ export default {
     const differenceSign = ref(null)
     const state = useStore()
 
+    Chart.defaults.font.family = 'Capsule Sans Text'
+    Chart.defaults.font.size = 15
+
+    const tooltipPlugin = Chart.registry.getPlugin('tooltip');
+      tooltipPlugin.positioners.customPosition = function(elements, eventPosition) {
+          /** @type {Tooltip} */
+          const tooltip = this;
+          let x
+
+          if (elements.element) {
+            x = element.x
+          } else {
+            x = eventPosition.x
+          }
+          return {
+              x,
+              y: 0
+          };
+      };
+
+
     const initializeChart = rawData => {
       const prices = rawData.map(time => time.average)
       const times = ['09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55']
 
       // red or green line
-      const borderColor = differenceSign.value > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'
+      const currentColor = differenceSign.value > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'
 
       const data = {
         labels: times,
         datasets:[{
           data: prices,
-          borderColor
+          borderColor: currentColor
         }]
       }
+
+      
 
       const config = {
         type: 'line',
         data,
-        options: {
+        options: { 
+          plugins: {
+            tooltip: {
+              displayColors: false,
+              position: 'customPosition',
+              caretSize: 0,
+              callbacks: {
+                title: context => {
+                  return convertTime(context[0].label, 'hh:mm A')
+                },
+                label: context => {
+                  return '$' + context.raw.toFixed(2)
+                }
+              }
+            }
+          },
+           interaction: {
+                mode: 'index',
+                intersect: false,
+                axis: 'x'
+              },
           scales: {
               x: {
                 display: false,
@@ -138,7 +179,10 @@ export default {
           },
           elements: {
             point: {
-              radius: 0
+              radius: 0,
+              backgroundColor: currentColor,
+              hoverRadius: 4,
+              hoverBorderWidth: 0
             },
             line: {
               borderWidth: 2
@@ -254,5 +298,4 @@ export default {
 </script>
 
 <style>
-  
 </style>

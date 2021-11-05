@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between items-center px-4 pr-2 py-3 w-full group relative" :class="showDotsMenu ? 'z-10' : ''" @mouseOver="showDots = true" @mouseLeave="showDots = false">
       <div class="flex items-center truncate">
-            <p class="h-10 w-8.5 flex items-center justify-center rounded bg-light-gray dark:bg-neutral-bg-3 flex-shrink-0" v-html="`&#${list.emoji};`"></p>
+            <p class="h-10 w-8.5 flex items-center justify-center rounded bg-light-gray dark:bg-neutral-bg-3 flex-shrink-0 duration-1000 transition-colors ease-linear" v-html="`&#${list.emoji};`"></p>
             <p class="text-base-xs font-medium ml-3 truncate">
                 {{ list.title }}
             </p>

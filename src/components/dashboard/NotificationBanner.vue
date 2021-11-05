@@ -78,8 +78,6 @@ export default {
                 deleted.value = recentlyUpdatedLists.filter(list => {
                     return list.changeType === 'delete'
                 })
-                console.log(added.value)
-                console.log(deleted.value)
             }
         })
 

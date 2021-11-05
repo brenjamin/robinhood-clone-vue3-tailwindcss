@@ -44,7 +44,7 @@ export default {
                     title: newListName.value,
                     emoji: emoji.value,
                     userId: store.state.user.uid,
-                    stocks: ['HUBS', 'F', 'MSFT'],
+                    stocks: [],
                     createdAt: timestamp()
                 })
                 isPending.value = false

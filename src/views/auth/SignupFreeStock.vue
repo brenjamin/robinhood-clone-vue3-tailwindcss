@@ -62,9 +62,10 @@
 
 <script>
 import RotatingCards from '@/components/auth/RotatingCards'
-import getStockSandbox from '@/composables/getStockSandbox'
+import { projectFunctions } from "@/firebase/config"
 import { ref } from 'vue'
 import date from 'date-and-time'
+import { useStore } from 'vuex'
 export default {
     name: 'SignupFreeStock',
     components: {
@@ -107,12 +108,14 @@ export default {
         const updatedStockCards = ref([])
         const loading = ref(true)
         const formattedDate = ref(null)
+        const getStock = projectFunctions.httpsCallable("getStock")
 
         const loadStockData = async () => {
             for (const stock of stockCards.value) {
-                let { data, error } = await getStockSandbox('/stock/' + stock.symbol + '/quote/latestPrice', true)
-                updatedStockCards.value.push({...stock, latestPrice: data.value.toFixed(2), error: error.value })
-                prices.value.push(parseFloat(data.value.toFixed(2)))
+                let result = await getStock(`stock/${stock.symbol}/quote`)
+                let data = JSON.parse(result.data)
+                updatedStockCards.value.push({...stock, latestPrice: data.latestPrice.toFixed(2) })
+                prices.value.push(parseFloat(data.latestPrice.toFixed(2)))
             }
             const now = new Date()
             formattedDate.value = date.format(now, 'MM/DD/YYYY hh:mm A [GMT]Z')

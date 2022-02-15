@@ -1,15 +1,34 @@
 <template>
-  <div class="dark:text-white duration-1000 transition-colors ease-linear">
+  <div class="dark:text-white duration-1000 transition-colors ease-linear overflow-hidden">
     <h1 v-if="companyInfo" class="text-2.5xl ">{{ companyInfo.companyName }}</h1>
     <h1 v-else class="text-2.5xl shimmer w-80">&nbsp;</h1>
-    <p v-if="latestPrice" class="text-2.5xl font-medium mt-1.5">${{ latestPrice.toFixed(2) }}</p>
+    <p v-if="priceToDisplay && intradayPrices.length" class="text-2.5xl font-medium mt-1.5 overflow-hidden relative">
+      <span class="inline-flex self-center">$</span
+      ><transition-group name="slide-out"
+        ><span class="inline-flex self-center overflow-hidden" v-for="(char, index) in priceToDisplay.toFixed(2).split('')" :key="`${char}_${index}`">{{ char }}</span></transition-group
+      >
+    </p>
     <p v-else class="text-2.5xl shimmer w-40 font-medium mt-1">&nbsp;</p>
     <p class="mt-1 text-base-xs font-semibold" v-html="priceChange" :class="latestPrice && previousClose ? '' : 'shimmer w-16'"></p>
   </div>
-  <div class="relative mt-3 h-49">
-    <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath">
+  <div class="relative mt-10 h-49">
+    <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
       <g>
-        <path :d="linePath" fill="none" stroke-width="2" :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" />
+        <g>
+          <line x1="0" :x2="chartWidth + 1" :y1="yScale(previousClose)" :y2="yScale(previousClose)" :stroke-dasharray="`1, ${xScale(xValue(intradayPrices[1])) - xScale(xValue(intradayPrices[0])) - 1}`" />
+        </g>
+        <g>
+          <path :d="linePath" fill="none" stroke-width="2" :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" />
+        </g>
+        <g v-if="activeIndex !== null" :transform="`translate(${xScale(xValue(intradayPrices[activeIndex]))}, 0)`">
+          <text text-anchor="middle" y="-20" class="active-time text-base-xs">{{ intradayPrices[activeIndex].label }}</text>
+          <line stroke="2" x1="0" x2="0" y1="0" :y2="chartHeight" />
+        </g>
+        <g>
+          <template :key="index" v-for="(item, index) in intradayPrices">
+            <circle v-show="index === activeIndex" :fill="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" :cx="xScale(xValue(item))" :cy="yScale(yValue(item))" r="5" />
+          </template>
+        </g>
       </g>
     </svg>
     <p v-if="dataUnavailable">Price data not available</p>
@@ -79,7 +98,7 @@ import { projectFunctions } from "@/firebase/config"
 import { useStore } from "vuex"
 import date from "date-and-time"
 const convertTime = require("convert-time")
-import { line, scaleTime, scaleLinear, extent } from "d3"
+import { line, scaleTime, scaleLinear, extent, scan } from "d3"
 
 export default {
   name: "SingleStock",
@@ -96,36 +115,53 @@ export default {
     const state = useStore()
     const chartWidth = 676
     const chartHeight = 196
-    const xValue = d => d.minute
+    const xValue = d => d.fullDate
     const yValue = d => d.average
+    const xScale = ref(null)
+    const yScale = ref(null)
     const todaysDate = ref(null)
     const linePath = ref(null)
     const dataUnavailable = ref(false)
+    const activeIndex = ref(null)
+    const priceToDisplay = ref(null)
+
+    const handleMouseMove = e => {
+      let hoveredDate = xScale.value.invert(e.offsetX)
+      const closestIndex = scan(intradayPrices.value, (a, b) => getDistanceFromHoveredDate(a, hoveredDate) - getDistanceFromHoveredDate(b, hoveredDate))
+
+      activeIndex.value = closestIndex
+      priceToDisplay.value = intradayPrices.value[activeIndex.value].average
+      // priceToDisplay.value = 1000
+    }
+
+    const handleMouseLeave = () => {
+      activeIndex.value = null
+      priceToDisplay.value = latestPrice.value
+    }
+
+    const getDistanceFromHoveredDate = (d, hoveredDate) => Math.abs(xValue(d).getTime() - hoveredDate.getTime())
 
     const initializeChart = () => {
       todaysDate.value = intradayPrices.value[0].date
 
-      console.log("Later Prices", intradayPrices.value)
-
-      const xScale = scaleTime()
-        .domain([new Date(`${todaysDate.value}T09:30:00Z`), new Date(`${todaysDate.value}T16:00:00Z`)])
+      xScale.value = scaleTime()
+        .domain([new Date(`${todaysDate.value}T09:30:00`), new Date(`${todaysDate.value}T16:00:00`)])
         .range([0, chartWidth])
 
-      const yScale = scaleLinear()
+      yScale.value = scaleLinear()
         .domain(extent(intradayPrices.value, yValue))
         .range([chartHeight, 0])
 
-      console.log(xScale.domain())
-      console.log(xScale.range())
-
       linePath.value = line()
-        .x(d => xScale(xValue(d)))
-        .y(d => yScale(yValue(d)))(intradayPrices.value)
+        .x(d => xScale.value(xValue(d)))
+        .y(d => yScale.value(yValue(d)))(intradayPrices.value)
     }
 
     const priceChange = computed(() => {
-      if (latestPrice.value && previousClose.value) {
-        let diff = parseFloat(latestPrice.value) - parseFloat(previousClose.value)
+      if (latestPrice.value && previousClose.value && intradayPrices.value.length) {
+        let price = activeIndex.value !== null ? intradayPrices.value[activeIndex.value].average : latestPrice.value
+
+        let diff = parseFloat(price) - parseFloat(previousClose.value)
         let sign = Math.sign(diff) > -1 ? "+" : "-"
         diff = Math.abs(diff).toFixed(2)
         let percent = parseFloat(Math.abs((diff / previousClose.value) * 100)).toFixed(2)
@@ -160,7 +196,9 @@ export default {
       let result = await getStock(`stock/${props.symbol}/quote`)
       let data = JSON.parse(result.data)
       latestPrice.value = data.latestPrice
+      priceToDisplay.value = data.latestPrice
       previousClose.value = data.previousClose
+      console.log(previousClose.value)
       differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
     }
 
@@ -168,9 +206,9 @@ export default {
       let result = await getStock(`stock/${props.symbol}/intraday-prices`)
       try {
         intradayPrices.value = JSON.parse(result.data)
-        console.log("Initial", intradayPrices.value)
         if (intradayPrices.value[0].average !== null) {
           intradayPrices.value = intradayPrices.value.map((item, index) => {
+            item.fullDate = new Date(`${item.date}T${item.minute}:00`)
             if (item.average) return item
 
             let count = 1
@@ -181,20 +219,12 @@ export default {
               replacement = intradayPrices.value[index - count]
             }
 
-            return replacement
-          })
-          intradayPrices.value = intradayPrices.value.filter((item, index, arr) => {
-            return index % 5 === 0
-          })
-          intradayPrices.value = intradayPrices.value.map((item, index) => {
-            if (!(index === intradayPrices.value.length - 1)) {
-              item.minute = new Date(`${item.date}T${item.minute}:00Z`)
-            }
-            // set last item to 16:00:00
-            else {
-              item.minute = new Date(`${item.date}T16:00:00Z`)
-            }
+            item.average = replacement.average
+
             return item
+          })
+          intradayPrices.value = intradayPrices.value.filter((item, index) => {
+            return index % 5 === 0
           })
           initializeChart()
         } else {
@@ -224,9 +254,47 @@ export default {
 
     start()
 
-    return { latestPrice, intradayPrices, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow, chartWidth, chartHeight, linePath, dataUnavailable }
+    return { latestPrice, intradayPrices, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow, chartWidth, chartHeight, linePath, dataUnavailable, xScale, xValue, yScale, yValue, activeIndex, handleMouseMove, handleMouseLeave, priceToDisplay }
   }
 }
 </script>
 
-<style></style>
+<style scoped>
+circle {
+  stroke-width: 2;
+  stroke: white;
+  transition: fill 1s, stroke 1s;
+}
+body.dark circle {
+  stroke: black;
+}
+line {
+  stroke: black;
+}
+.active-time {
+  fill: black;
+}
+body.dark .active-time {
+  fill: rgb(145, 159, 166);
+}
+body.dark line {
+  stroke: rgb(145, 159, 166);
+}
+svg {
+  overflow: visible;
+}
+.slide-out-move,
+.slide-out-enter-active,
+.slide-out-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-out-enter-from {
+  transform: translate(0, -40px);
+}
+.slide-out-leave-to {
+  transform: translate(0, 40px);
+}
+.slide-out-leave-active {
+  position: absolute;
+}
+</style>

@@ -14,8 +14,8 @@
   <div class="relative mt-10 h-49">
     <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
       <g>
-        <g>
-          <line x1="0" :x2="chartWidth + 1" :y1="yScale(previousClose)" :y2="yScale(previousClose)" :stroke-dasharray="`1, ${xScale(xValue(intradayPrices[1])) - xScale(xValue(intradayPrices[0])) - 1}`" />
+        <g v-if="previousCloseY !== null">
+          <line x1="0" :x2="chartWidth + 1" :y1="previousCloseY" :y2="previousCloseY" :stroke-dasharray="`1, ${xScale(xValue(intradayPrices[1])) - xScale(xValue(intradayPrices[0])) - 1}`" />
         </g>
         <g>
           <path :d="linePath" fill="none" stroke-width="2" :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" />
@@ -124,6 +124,7 @@ export default {
     const dataUnavailable = ref(false)
     const activeIndex = ref(null)
     const priceToDisplay = ref(null)
+    const previousCloseY = ref(null)
 
     const handleMouseMove = e => {
       let hoveredDate = xScale.value.invert(e.offsetX)
@@ -151,6 +152,14 @@ export default {
       yScale.value = scaleLinear()
         .domain(extent(intradayPrices.value, yValue))
         .range([chartHeight, 0])
+
+      previousCloseY.value = yScale.value(previousClose.value)
+
+      if (previousCloseY.value > chartHeight) {
+        previousCloseY.value = chartHeight
+      } else if (previousCloseY.value < 0) {
+        previousCloseY.value = 0
+      }
 
       linePath.value = line()
         .x(d => xScale.value(xValue(d)))
@@ -254,7 +263,7 @@ export default {
 
     start()
 
-    return { latestPrice, intradayPrices, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow, chartWidth, chartHeight, linePath, dataUnavailable, xScale, xValue, yScale, yValue, activeIndex, handleMouseMove, handleMouseLeave, priceToDisplay }
+    return { latestPrice, intradayPrices, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow, chartWidth, chartHeight, linePath, dataUnavailable, xScale, xValue, yScale, yValue, activeIndex, handleMouseMove, handleMouseLeave, priceToDisplay, previousCloseY }
   }
 }
 </script>
@@ -269,7 +278,7 @@ body.dark circle {
   stroke: black;
 }
 line {
-  stroke: black;
+  stroke: rgb(106, 114, 120);
 }
 .active-time {
   fill: black;

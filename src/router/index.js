@@ -5,7 +5,7 @@ import Signup from "@/views/auth/Signup"
 import SignupFreeStock from "@/views/auth/SignupFreeStock"
 import Dashboard from "@/views/Dashboard"
 import SingleStock from "@/components/dashboard/SingleStock"
-// import RandomStock from "@/components/dashboard/RandomStock"
+import SampleDashboard from "@/components/auth/SampleDashboard"
 
 // route guards
 import { projectAuth } from "../firebase/config"
@@ -73,6 +73,12 @@ const routes = [
         props: { symbol: "HOOD" }
       }
     ]
+  },
+  {
+    path: "/sample-dashboard",
+    name: "SampleDashboard",
+    component: SampleDashboard,
+    beforeEnter: autoLogin
   }
 ]
 

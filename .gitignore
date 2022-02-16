@@ -6,6 +6,7 @@ src/firebase
 .env
 ui-debug.log
 firebase-debug.log
+SampleDashboard.vue
 
 
 # local env files

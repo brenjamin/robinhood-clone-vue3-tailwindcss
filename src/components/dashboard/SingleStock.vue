@@ -2,7 +2,7 @@
   <div class="dark:text-white duration-1000 transition-colors ease-linear overflow-hidden">
     <h1 v-if="companyInfo" class="text-2.5xl ">{{ companyInfo.companyName }}</h1>
     <h1 v-else class="text-2.5xl shimmer w-80">&nbsp;</h1>
-    <p v-if="priceToDisplay && intradayPrices.length" class="text-2.5xl font-medium mt-1.5 overflow-hidden relative">
+    <p v-if="priceToDisplay" class="text-2.5xl font-medium mt-1.5 overflow-hidden relative">
       <span class="inline-flex self-center">$</span
       ><transition-group name="slide-out"
         ><span class="inline-flex self-center overflow-hidden" v-for="(char, index) in priceToDisplay.toFixed(2).split('')" :key="`${char}_${index}`">{{ char }}</span></transition-group
@@ -207,8 +207,10 @@ export default {
       latestPrice.value = data.latestPrice
       priceToDisplay.value = data.latestPrice
       previousClose.value = data.previousClose
+      console.log(latestPrice.value)
       console.log(previousClose.value)
       differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
+      console.log(differenceSign.value)
     }
 
     const getIntradayPrices = async () => {

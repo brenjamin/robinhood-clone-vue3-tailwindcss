@@ -22,16 +22,14 @@
                   </button>
               </div>
           </div>
-          <button class="hover:text-light-green rounded ml-2 p-2 hover:bg-border-gray dark:hover:bg-neutral-bg-3 relative" @click.prevent="isOpen = !isOpen" @click.once="loadStocks = true">
+          <button class="hover:text-light-green rounded ml-2 p-2 hover:bg-border-gray dark:hover:bg-neutral-bg-3 relative" @click.prevent="isOpen = !isOpen">
               <svg class="fill-current transform duration-200" :class="isOpen ? 'rotate-180' : ''" height="16" role="img" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M1.71484 6.28535L2.95228 5.04791L8.00023 10.0959L13.0482 5.04791L14.2856 6.28535L8.00023 12.5707L1.71484 6.28535Z" fill-rule="evenodd"></path></svg>
           </button>
       </div>
   </div>
-  <div v-if="loadStocks">
-      <div v-show="isOpen">
+    <div v-show="isOpen">
         <SingleStockSidebar v-for="stock in list.stocks" :stock="stock" :key="stock" />
-      </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -49,7 +47,6 @@ export default {
         const isOpen = ref(false)
         const showDots = ref(false)
         const showDotsMenu = ref(false)
-        const loadStocks = ref(false)
         const store = useStore()
 
         const dotClasses = computed(() => { 
@@ -78,7 +75,7 @@ export default {
         }
 
 
-        return { isOpen, showDots, showDotsMenu, dotClasses, loadStocks, prepareToDelete, prepareToEdit }
+        return { isOpen, showDots, showDotsMenu, dotClasses, prepareToDelete, prepareToEdit }
     }
 }
 </script>

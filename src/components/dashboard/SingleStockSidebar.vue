@@ -1,7 +1,8 @@
 <template>
   <router-link :to="{ name: 'SingleStock', params: { symbol: stock } }" class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-light-gray dark:hover:bg-neutral-bg-3">
     <p>{{ stock }}</p>
-    <div class="relative w-15 h-4">
+    <p class="text-base-xs font-normal" v-if="dataUnavailable">No data</p>
+    <div v-else class="relative w-15 h-4">
       <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath">
         <g>
           <g v-if="previousCloseY !== null">
@@ -12,8 +13,6 @@
           </g>
         </g>
       </svg>
-      <div v-if="!intradayPrices.length" class="h-4"></div>
-      <p class="text-base-xs font-normal h-4" v-if="dataUnavailable">No data</p>
     </div>
     <div class="flex flex-col items-end font-normal" v-if="latestPrice && previousClose">
       <p v-if="latestPrice" class="text-base-xs leading-tight">${{ latestPrice.toFixed(2) }}</p>
@@ -72,9 +71,6 @@ export default {
       linePath.value = line()
         .x(d => xScale.value(xValue(d)))
         .y(d => yScale.value(yValue(d)))(intradayPrices.value)
-
-      console.log(intradayPrices.length)
-      console.log(linePath)
     }
 
     const priceChange = computed(() => {
@@ -97,9 +93,7 @@ export default {
     }
 
     const getIntradayPrices = async () => {
-      console.log("get prices")
       let result = await getStock(`stock/${props.stock}/intraday-prices`)
-      console.log("Result", result.data)
       try {
         intradayPrices.value = JSON.parse(result.data)
         if (intradayPrices.value[0].average !== null) {
@@ -122,7 +116,6 @@ export default {
           intradayPrices.value = intradayPrices.value.filter((item, index) => {
             return index % 5 === 0
           })
-          console.log("Prices", intradayPrices.value)
           initializeChart()
         } else {
           intradayPrices.value = []

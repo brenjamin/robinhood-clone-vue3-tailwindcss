@@ -1,8 +1,9 @@
 [build]
+  command = "npm run build"
   functions = "netlify/functions"
   publish = "dist"
 
 [dev]
+  command = "npm run serve"
   functions = "netlify/functions"
-  publish = "dist"
   port = 8888

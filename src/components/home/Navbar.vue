@@ -74,8 +74,11 @@
         </ul>
       </div>
       <div class="hidden lg:flex items-center">
-        <router-link :to="{ name: 'Login' }" class="font-bold hover:text-green">
-          Log In
+        <router-link
+          :to="{ name: 'SampleDashboard' }"
+          class="font-bold hover:text-green"
+        >
+          Sample Dashboard
         </router-link>
         <router-link
           :to="{ name: 'SignupFreeStock' }"

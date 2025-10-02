@@ -91,11 +91,11 @@
         class="flex flex-col justify-center lg:hidden focus:outline-none"
       >
         <div
-          class="bg-black origin-center transition-all duration-300"
+          class="bg-black origin-center"
           :class="{ active: mobileMenuIsActive }"
         ></div>
         <div
-          class="bg-black origin-center transition-all duration-300"
+          class="bg-black origin-center"
           :class="{ active: mobileMenuIsActive }"
         ></div>
       </button>

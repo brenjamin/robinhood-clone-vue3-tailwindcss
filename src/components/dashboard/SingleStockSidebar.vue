@@ -56,13 +56,12 @@ import { ref, computed, watch } from 'vue'
 import { projectFunctions } from '@/firebase/config'
 import { line, scaleTime, scaleLinear, extent } from 'd3'
 import { getIntradayDummyData } from '../../composables/getIntradayDummyData'
+import { getStock } from '../../utils/api'
 
 export default {
   name: 'SingleStockSidebar',
   props: ['stock', 'isOpen'],
   setup(props) {
-    const getStock = projectFunctions.httpsCallable('getStock')
-
     const latestPrice = ref(null)
     const previousClose = ref(null)
     const intradayPrices = ref([])
@@ -122,11 +121,10 @@ export default {
     })
 
     const getQuote = async () => {
-      let result = await getStock({
+      let data = await getStock({
         provider: 'finnhub',
         endpoint: `quote?symbol=${props.stock}`
       })
-      let data = result.data
       latestPrice.value = data.c
       previousClose.value = data.pc
       differenceSign.value = Math.sign(

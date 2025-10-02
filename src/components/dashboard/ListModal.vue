@@ -15,11 +15,11 @@
                     <p class="text-lg font-bold">Edit List</p>
                     <div class="flex items-center mt-7 px-4">
                     <button ref="emojiTrigger" @click="toggleEmojiPicker" class="flex-shrink-0 block border border-border-gray dark:border-neutral-bg-3 rounded h-10 w-10 items-center justify-center" type="button"><span v-if="emoji" v-html="`&#${emoji};`"></span></button>
-                    <div class="ml-2 dark:bg-neutral-bg-3 border border-transparent rounded  dark:focus-within:bg-transparent transition-colors duration-150 flex-grow">
-                        <input required placeholder="List Name" type="text" class="focus:outline-none dark:focus:border-light-green focus:border-light-green dark:border-transparent border-border-gray dark:border-neutral-bg-3 h-9 transition-colors duration-150 w-full rounded py-1 px-2 border text-base-xs bg-transparent" v-model="newListName">
+                    <div class="ml-2 dark:bg-neutral-bg-3 border border-transparent rounded  dark:focus-within:bg-transparent flex-grow">
+                        <input required placeholder="List Name" type="text" class="focus:outline-none dark:focus:border-light-green focus:border-light-green dark:border-transparent border-border-gray dark:border-neutral-bg-3 h-9 w-full rounded py-1 px-2 border text-base-xs bg-transparent" v-model="newListName">
                     </div>
                     </div>
-                    <div class="flex justify-end items-center mt-2 transition-colors duration-200">
+                    <div class="flex justify-end items-center mt-2">
                         <button v-show="!isPending" type="submit" class="mt-6 text-base-xs truncate w-full rounded bg-light-green hover:bg-lighter-green p-4 flex items-center justify-center h-12 font-bold"><span class="text-white dark:text-black">Save</span></button>
                         <button disabled v-show="isPending" type="submit" class="mt-6 text-base-xs truncate w-full rounded bg-light-green p-4 flex items-center justify-center h-12 font-bold"><img class="w-10" :src="require('@/assets/img/auth/spinner-black.svg')"></button>
                     </div>
@@ -36,13 +36,13 @@
                             <p class="font-medium text-base-sm" v-else>No lists to display</p>
                         </template>
                     </div>
-                    <div class="flex justify-end items-center mt-2 transition-colors duration-200">
+                    <div class="flex justify-end items-center mt-2">
                         <button v-show="!isPending" :disabled="selectionChanged === 0" type="submit" class="mt-6 text-base-xs truncate w-full rounded p-4 flex items-center justify-center h-12 font-bold" :class="selectionChanged === 0 ? 'bg-neutral-bg-2' : 'bg-light-green hover:bg-lighter-green' "><span class="text-white dark:text-black">Save Changes</span></button>
                         <button v-show="isPending" disabled type="submit" class="mt-6 text-base-xs truncate w-full rounded bg-light-green p-4 flex items-center justify-center h-12 font-bold"><img class="w-10" :src="require('@/assets/img/auth/spinner-black.svg')"></button>
                     </div>
                 </form>
                 <p v-if="error" class="px-5 mt-1 text-base-xs font-bold text-red">{{ error }}</p>
-                <button type="button" class="z-20 absolute rounded top-4 right-4 focus:outline-none p-1.5 hover:bg-light-gray dark:hover:bg-neutral-bg-3 transition-colors duration-150 dark:text-white" @click="closeListModal">
+                <button type="button" class="z-20 absolute rounded top-4 right-4 focus:outline-none p-1.5 hover:bg-light-gray dark:hover:bg-neutral-bg-3 dark:text-white" @click="closeListModal">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-8 h-8 stroke-current">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>

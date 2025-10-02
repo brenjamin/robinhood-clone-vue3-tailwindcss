@@ -33,3 +33,6 @@ pnpm-debug.log*
 src/assets/img
 src/assets/fonts
 src/assets/video
+
+# Local Netlify folder
+.netlify

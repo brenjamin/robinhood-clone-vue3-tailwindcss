@@ -1,13 +1,13 @@
 <template>
   <div class="flex justify-between items-center px-4 pr-2 py-3 w-full group relative" :class="showDotsMenu ? 'z-10' : ''" @mouseover="showDots = true" @mouseleave="showDots = false">
       <div class="flex items-center truncate">
-            <p class="h-10 w-8.5 flex items-center justify-center rounded bg-light-gray dark:bg-neutral-bg-3 flex-shrink-0 duration-1000 transition-colors ease-linear" v-html="`&#${list.emoji};`"></p>
+            <p class="h-10 w-8.5 flex items-center justify-center rounded bg-light-gray dark:bg-neutral-bg-3 flex-shrink-0" v-html="`&#${list.emoji};`"></p>
             <p class="text-base-xs font-medium ml-3 truncate">
                 {{ list.title }}
             </p>
       </div>
       <div class="flex items-center pl-2">
-          <div class="transition-none block relative" :class="dotClasses" @click.prevent="showDotsMenu = !showDotsMenu">
+          <div class="block relative" :class="dotClasses" @click.prevent="showDotsMenu = !showDotsMenu">
               <button class="hover:text-light-green border-b-2 flex items-center h-full" :class="showDotsMenu ? 'highlighted' : 'border-transparent'">
                   <svg class="fill-current stroke-current" height="24" role="img" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 10.5H3.5V13.5H6.5V10.5Z"></path><path d="M13.5 10.5H10.5V13.5H13.5V10.5Z"></path><path d="M17.5 10.5H20.5V13.5H17.5V10.5Z"></path></svg>
               </button>

@@ -8,7 +8,7 @@
       provide financial advice.
     </div>
     <header
-      class="flex justify-between px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black transition-all duration-1000 ease-linear"
+      class="flex justify-between px-5 lg:px-10 xl:px-12 mx-auto bg-white dark:bg-black"
     >
       <div class="flex lg:w-3/5 xl:w-1/2 flex-grow">
         <div class="flex items-center">
@@ -40,12 +40,7 @@
           class="mt-3.5 mx-3 sm:mx-6 xl:w-full xl:max-w-screen-lg xl:fixed xl:transform xl:-translate-x-1/2 xl:left-1/2 z-50 flex-grow"
         >
           <div
-            class="flex-grow w-full md:w-120 max-w-full px-3 text-base-xs border border-solid bg-white border-border-gray focus-within:border-transparent hover:border-transparent hover:shadow-input focus-within:shadow-input dark:bg-black dark:focus-within:bg-dark-bg-gray dark:border-neutral-bg-3 dark:hover:bg-dark-bg-gray rounded transition-all"
-            :class="
-              transitioningToDarkMode
-                ? 'duration-1000 ease-linear'
-                : 'duration-200'
-            "
+            class="flex-grow w-full md:w-120 max-w-full px-3 text-base-xs border border-solid bg-white border-border-gray focus-within:border-transparent hover:border-transparent hover:shadow-input focus-within:shadow-input dark:bg-black dark:focus-within:bg-dark-bg-gray dark:border-neutral-bg-3 dark:hover:bg-dark-bg-gray rounded"
           >
             <div class="flex items-center">
               <div
@@ -134,9 +129,9 @@
 <script>
 import { useStore } from 'vuex'
 import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue'
-import { projectFunctions } from '@/firebase/config'
 import useLogout from '@/composables/useLogout'
 import { useRouter } from 'vue-router'
+import { searchStock } from '@/utils/api'
 
 export default {
   name: 'DashboardNav',
@@ -190,15 +185,13 @@ export default {
         transitioningToDarkMode.value = false
       }, 1000)
     }
-    const searchStock = projectFunctions.httpsCallable('searchStock')
 
     const updateStocks = () => {
       clearTimeout(searchTimeout)
       searchTimeout = setTimeout(() => {
         if (searchTerm.value) {
           searchStock(searchTerm.value).then(result => {
-            let results = result.data.result
-            console.log('RESULTS: ', results)
+            let results = result.result
             if (results.length) {
               searchResults.value = results
               console.log(searchResults.value)

@@ -128,8 +128,7 @@
 import RotatingCards from '@/components/auth/RotatingCards'
 import { ref } from 'vue'
 import date from 'date-and-time'
-import { projectFunctions } from '@/firebase/config'
-
+import { getStock } from '../../utils/api'
 export default {
   name: 'SignupFreeStock',
   components: {
@@ -173,8 +172,6 @@ export default {
     const loading = ref(true)
     const formattedDate = ref(null)
 
-    const getStock = projectFunctions.httpsCallable('getStock')
-
     const loadStockData = async () => {
       updatedStockCards.value = [] // reset
       prices.value = []
@@ -182,11 +179,10 @@ export default {
       for (const stock of stockCards.value) {
         try {
           // Call your Firebase Function, passing { symbol }
-          const res = await getStock({
+          const result = await getStock({
             provider: 'finnhub',
             endpoint: `quote?symbol=${stock.symbol}`
           })
-          const result = res.data // { symbol, current, high, low, open, prevClose }
 
           if (result && typeof result.c === 'number') {
             const price = parseFloat(result.c.toFixed(2))

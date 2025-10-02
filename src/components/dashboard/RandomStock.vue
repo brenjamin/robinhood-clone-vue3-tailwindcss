@@ -8,7 +8,7 @@
 <script>
 import SingleStock from '@/components/dashboard/SingleStock'
 import { ref } from 'vue'
-import { projectFunctions } from '@/firebase/config'
+import { getStock } from '../../utils/api'
 
 export default {
   name: 'RandomStock',
@@ -17,7 +17,6 @@ export default {
   },
   setup() {
     const randomStock = ref(null)
-    const getStock = projectFunctions.httpsCallable('getStock')
 
     const getRandomStock = () => {
       getStock('ref-data/iex/symbols').then(result => {

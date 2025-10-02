@@ -2,12 +2,12 @@
   <form class="px-4 py-2" @submit.prevent="handleAdd">
     <div class="flex items-center">
         <button ref="emojiTrigger" @click="toggleEmojiPicker" class="flex-shrink-0 block border border-border-gray dark:border-neutral-bg-3 rounded h-10 w-10 items-center justify-center" type="button" v-html="`&#${emoji};`"></button>
-        <div class="ml-2 dark:bg-neutral-bg-3 border border-transparent rounded  dark:focus-within:bg-transparent transition-colors duration-150">
-            <input required placeholder="List Name" type="text" class="focus:outline-none dark:focus:border-light-green focus:border-light-green dark:border-transparent border-border-gray dark:border-neutral-bg-3 h-9 transition-colors duration-150 w-full rounded py-1 px-2 border text-base-xs bg-transparent" v-model="newListName">
+        <div class="ml-2 dark:bg-neutral-bg-3 border border-transparent rounded  dark:focus-within:bg-transparent">
+            <input required placeholder="List Name" type="text" class="focus:outline-none dark:focus:border-light-green focus:border-light-green dark:border-transparent border-border-gray dark:border-neutral-bg-3 h-9 w-full rounded py-1 px-2 border text-base-xs bg-transparent" v-model="newListName">
         </div>
     </div>
-    <div class="flex justify-end items-center mt-2 transition-colors duratoin-200">
-        <button type="button" class="flex items-center justify-center rounded font-bold text-base-xs w-20 h-9 border-light-green border text-light-green dark:text-light-green transition-colors duration-150 hover:bg-lightest-green" @click="hideForm">Cancel</button>
+    <div class="flex justify-end items-center mt-2">
+        <button type="button" class="flex items-center justify-center rounded font-bold text-base-xs w-20 h-9 border-light-green border text-light-green dark:text-light-green hover:bg-lightest-green" @click="hideForm">Cancel</button>
         <button v-if="!isPending" type="submit" class="flex items-center justify-center ml-2 rounded bg-light-green font-bold text-base-xs w-24 h-9 text-white border-light-green border dark:text-black hover:bg-lighter-green">Create List</button>
         <button v-else type="submit" class="flex items-center justify-center ml-2 rounded bg-light-green font-bold text-base-xs w-24 h-9 text-white border-light-green border dark:text-black hover:bg-lighter-green" disabled><img class="w-10" :src="require('@/assets/img/auth/spinner.svg')"></button>
     </div>

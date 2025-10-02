@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white transition-all duration-1000 ease-linear"
+    class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white"
   >
     <DashboardNav />
     <div class="dashboard-wrapper mx-auto py-9 flex items-start relative">

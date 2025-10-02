@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="dark:text-white duration-1000 transition-colors ease-linear overflow-hidden"
-  >
+  <div class="dark:text-white overflow-hidden">
     <h1 v-if="companyInfo" class="text-2.5xl">
       {{ companyInfo?.name }}
     </h1>
@@ -146,12 +144,10 @@
   </div>
   <section class="mt-12 dark:text-white">
     <div v-if="companyInfo">
-      <h2
-        class="font-medium text-2xl pb-4 border-b border-neutral-bg-3 duration-1000 ease-linear transition-colors"
-      >
+      <h2 class="font-medium text-2xl pb-4 border-b border-neutral-bg-3">
         About
       </h2>
-      <p class="mt-6 text-base-sm duration-1000 ease-linear transition-colors;">
+      <p class="mt-6 text-base-sm">
         {{ companyInfo?.description || 'Description Not Found' }}
       </p>
       <div class="mt-4 flex justify-between">
@@ -192,18 +188,11 @@
     <div v-else class="shimmer h-64"></div>
   </section>
   <section class="mt-14 dark:text-white">
-    <h2
-      class="font-medium text-2xl transition-colors ease-linear duration-1000 pb-4 border-b border-neutral-bg-3"
-    >
-      News
-    </h2>
+    <h2 class="font-medium text-2xl pb-4 border-b border-neutral-bg-3">News</h2>
     <div v-if="news.length">
-      <article
-        v-for="article in news"
-        class="first:mt-1 transition-colors ease-linear duration-1000"
-      >
+      <article v-for="article in news" class="first:mt-1">
         <a
-          class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded transition-colors duration-200 ease-linear gap-x-16"
+          class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded gap-x-16"
           :href="article.article_url"
           rel="noopener"
           target="_blank"
@@ -243,18 +232,16 @@
 
 <script>
 import { ref, computed } from 'vue'
-import { projectFunctions } from '@/firebase/config'
 import { useStore } from 'vuex'
 import date from 'date-and-time'
 import { line, scaleTime, scaleLinear, extent, scan } from 'd3'
 import { getIntradayDummyData } from '../../composables/getIntradayDummyData'
+import { getStock } from '../../utils/api'
 
 export default {
   name: 'SingleStock',
   props: ['symbol'],
   setup(props) {
-    const getStock = projectFunctions.httpsCallable('getStock')
-
     const latestPrice = ref(null)
     const previousClose = ref(null)
     const intradayPrices = ref([])
@@ -369,26 +356,25 @@ export default {
         provider: 'polygon',
         endpoint: `v3/reference/tickers/${symbol.value}`
       })
-      if (result.data.status && result.data.status === 'ERROR') {
+      if (result.status && result.status === 'ERROR') {
         state.commit('updateNotificationType', 'error')
         state.commit(
           'setNotificationMessage',
-          result.data.error || 'Polygon API error'
+          result.error || 'Polygon API error'
         )
         state.commit('showNotification')
         companyInfo.value = { name: props.symbol.toUpperCase() }
         console.log(companyInfo.value)
         return
       }
-      companyInfo.value = result.data.results
+      companyInfo.value = result.results
     }
 
     const getQuote = async () => {
-      let result = await getStock({
+      let data = await getStock({
         provider: `finnhub`,
         endpoint: `quote?symbol=${symbol.value}`
       })
-      let data = result.data
 
       // Map Finnhub fields
       latestPrice.value = data.c
@@ -452,22 +438,21 @@ export default {
     }
 
     const getNews = async () => {
-      return
       let result = await getStock({
         provider: 'polygon',
         endpoint: `v2/reference/news?limit=3&ticker=${symbol.value}`
       })
-      if (result.data.status && result.data.status === 'ERROR') {
+      if (result.status && result.status === 'ERROR') {
         state.commit('updateNotificationType', 'error')
         state.commit(
           'setNotificationMessage',
-          result.data.error || 'Polygon API error'
+          result.error || 'Polygon API error'
         )
         state.commit('showNotification')
         news.value = []
         return
       }
-      news.value = result.data.results
+      news.value = result.results
     }
 
     const getAllInfo = async () => {

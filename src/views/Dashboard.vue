@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white transition-all duration-1000 ease-linear">
+  <div
+    class="bg-white dark:bg-black px-5 lg:px-10 xl:px-20 min-h-screen dark:text-white transition-all duration-1000 ease-linear"
+  >
     <DashboardNav />
-    <div class="h-16">
-    </div>
     <div class="dashboard-wrapper mx-auto py-9 flex items-start relative">
       <div class="w-2/3">
         <router-view :key="$route.path" />
@@ -40,13 +40,11 @@ export default {
     }
 
     const showNotification = computed(() => {
-        return store.state.showNotification
+      return store.state.showNotification
     })
 
     return { showNotification }
   }
-
-  
 }
 </script>
 
@@ -54,34 +52,47 @@ export default {
 .dashboard-wrapper {
   width: 1024px;
 }
-body.dark, body {
-   @apply ease-linear;
+body.dark,
+body {
+  @apply ease-linear;
 }
 body.dark {
-  @apply bg-black
+  @apply bg-black;
 }
 
-#app, button, a, h2 {
- @apply dark:text-white;
+#app,
+button,
+a,
+h2 {
+  @apply dark:text-white;
 }
 .shimmer {
-        animation : shimmer 4s infinite linear;
-        background-image: linear-gradient(to right, #f2f2f2 0%, #E8E8E8 50%, #f2f2f2 100%);
-        background-size: 250px 100%;
-        @apply rounded-md;
-    }
+  animation: shimmer 4s infinite linear;
+  background-image: linear-gradient(
+    to right,
+    #f2f2f2 0%,
+    #e8e8e8 50%,
+    #f2f2f2 100%
+  );
+  background-size: 250px 100%;
+  @apply rounded-md;
+}
 
-    .dark .shimmer {
-      background-image: linear-gradient(to right, rgb(121,133,139) 0%, rgb(48,54,58) 50%, rgb(121,133,139) 100%);
+.dark .shimmer {
+  background-image: linear-gradient(
+    to right,
+    rgb(121, 133, 139) 0%,
+    rgb(48, 54, 58) 50%,
+    rgb(121, 133, 139) 100%
+  );
+}
 
-    }
-
-    @keyframes shimmer {
-        0% {
-            background-position: -500px 0;
-        }
-        100% {
-            background-position: 500px 0;
-        }
-    }
+@keyframes shimmer {
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
+}
 </style>

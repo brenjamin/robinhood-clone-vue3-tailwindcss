@@ -1,37 +1,67 @@
 <template>
-  <router-link :to="{ name: 'SingleStock', params: { symbol: stock } }" class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-light-gray dark:hover:bg-neutral-bg-3">
+  <router-link
+    :to="{ name: 'SingleStock', params: { symbol: stock, isOpen } }"
+    class="flex text-base-xs font-bold items-center justify-between px-4 py-3 group hover:bg-light-gray dark:hover:bg-neutral-bg-3"
+  >
     <p>{{ stock }}</p>
     <p class="text-base-xs font-normal" v-if="dataUnavailable">No data</p>
     <div v-else class="relative w-15 h-4">
-      <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath">
+      <svg
+        :width="chartWidth"
+        :height="chartHeight"
+        v-if="intradayPrices.length && linePath"
+      >
         <g>
           <g v-if="previousCloseY !== null">
-            <line x1="0" :x2="chartWidth + 1" :y1="previousCloseY" :y2="previousCloseY" :stroke-dasharray="`1, 5`" />
+            <line
+              x1="0"
+              :x2="chartWidth + 1"
+              :y1="previousCloseY"
+              :y2="previousCloseY"
+              :stroke-dasharray="`1, 5`"
+            />
           </g>
           <g>
-            <path :d="linePath" fill="none" stroke-width="1" :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" />
+            <path
+              :d="linePath"
+              fill="none"
+              stroke-width="1"
+              :stroke="
+                differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'
+              "
+            />
           </g>
         </g>
       </svg>
     </div>
-    <div class="flex flex-col items-end font-normal" v-if="latestPrice && previousClose">
-      <p v-if="latestPrice" class="text-base-xs leading-tight">${{ latestPrice.toFixed(2) }}</p>
-      <p class="mt-1 text-base-xs leading-tight" :class="differenceSign > -1 ? 'text-light-green' : 'text-red'" v-html="priceChange"></p>
+    <div
+      class="flex flex-col items-end font-normal"
+      v-if="latestPrice && previousClose"
+    >
+      <p v-if="latestPrice" class="text-base-xs leading-tight">
+        ${{ latestPrice.toFixed(2) }}
+      </p>
+      <p
+        class="mt-1 text-base-xs leading-tight"
+        :class="differenceSign > -1 ? 'text-light-green' : 'text-red'"
+        v-html="priceChange"
+      ></p>
     </div>
     <div v-else class="h-9.125"></div>
   </router-link>
 </template>
 
 <script>
-import { ref, computed } from "vue"
-import { projectFunctions } from "@/firebase/config"
-import { line, scaleTime, scaleLinear, extent } from "d3"
+import { ref, computed, watch } from 'vue'
+import { projectFunctions } from '@/firebase/config'
+import { line, scaleTime, scaleLinear, extent } from 'd3'
+import { getIntradayDummyData } from '../../composables/getIntradayDummyData'
 
 export default {
-  name: "SingleStockSidebar",
-  props: ["stock"],
+  name: 'SingleStockSidebar',
+  props: ['stock', 'isOpen'],
   setup(props) {
-    const getStock = projectFunctions.httpsCallable("getStock")
+    const getStock = projectFunctions.httpsCallable('getStock')
 
     const latestPrice = ref(null)
     const previousClose = ref(null)
@@ -48,12 +78,16 @@ export default {
     const linePath = ref(null)
     const dataUnavailable = ref(false)
     const previousCloseY = ref(null)
+    const hasFetched = ref(false)
 
-    const initializeChart = rawData => {
+    const initializeChart = () => {
       todaysDate.value = intradayPrices.value[0].date
 
       xScale.value = scaleTime()
-        .domain([new Date(`${todaysDate.value}T09:30:00`), new Date(`${todaysDate.value}T16:00:00`)])
+        .domain([
+          new Date(`${todaysDate.value}T09:30:00`),
+          new Date(`${todaysDate.value}T16:00:00`)
+        ])
         .range([0, chartWidth])
 
       yScale.value = scaleLinear()
@@ -75,21 +109,44 @@ export default {
 
     const priceChange = computed(() => {
       if (latestPrice.value && previousClose.value) {
-        let diff = parseFloat(latestPrice.value) - parseFloat(previousClose.value)
-        let sign = Math.sign(diff) > -1 ? "+" : "-"
-        let percent = parseFloat(Math.abs((diff / previousClose.value) * 100)).toFixed(2)
-        return sign + percent + "%"
+        let diff =
+          parseFloat(latestPrice.value) - parseFloat(previousClose.value)
+        let sign = Math.sign(diff) > -1 ? '+' : '-'
+        let percent = parseFloat(
+          Math.abs((diff / previousClose.value) * 100)
+        ).toFixed(2)
+        return sign + percent + '%'
       } else {
-        return "&nbsp;"
+        return '&nbsp;'
       }
     })
 
     const getQuote = async () => {
-      let result = await getStock(`stock/${props.stock}/quote`)
-      let data = JSON.parse(result.data)
-      latestPrice.value = data.latestPrice
-      previousClose.value = data.previousClose
-      differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
+      let result = await getStock({
+        provider: 'finnhub',
+        endpoint: `quote?symbol=${props.stock}`
+      })
+      let data = result.data
+      latestPrice.value = data.c
+      previousClose.value = data.pc
+      differenceSign.value = Math.sign(
+        parseFloat(latestPrice.value) - parseFloat(previousClose.value)
+      )
+    }
+
+    // dummy data for intraday prices
+    const getIntradayDummyPrices = async () => {
+      try {
+        intradayPrices.value = await getIntradayDummyData(
+          latestPrice.value,
+          previousClose.value
+        )
+
+        initializeChart()
+      } catch (err) {
+        intradayPrices.value = []
+        dataUnavailable.value = true
+      }
     }
 
     const getIntradayPrices = async () => {
@@ -127,14 +184,31 @@ export default {
       }
     }
 
-    const start = async () => {
-      await getQuote()
-      getIntradayPrices()
+    watch(
+      () => props.isOpen,
+      async val => {
+        if (val && !hasFetched.value) {
+          hasFetched.value = true
+          await getQuote()
+          await getIntradayDummyPrices()
+        }
+      },
+      { immediate: true }
+    )
+
+    return {
+      latestPrice,
+      intradayPrices,
+      chartWidth,
+      chartHeight,
+      previousClose,
+      priceChange,
+      differenceSign,
+      loaded,
+      linePath,
+      dataUnavailable,
+      previousCloseY
     }
-
-    start()
-
-    return { latestPrice, intradayPrices, chartWidth, chartHeight, previousClose, priceChange, differenceSign, loaded, linePath, dataUnavailable, previousCloseY }
   }
 }
 </script>

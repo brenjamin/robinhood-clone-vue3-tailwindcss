@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center px-4 pr-2 py-3 w-full group relative" :class="showDotsMenu ? 'z-10' : ''" @mouseOver="showDots = true" @mouseLeave="showDots = false">
+  <div class="flex justify-between items-center px-4 pr-2 py-3 w-full group relative" :class="showDotsMenu ? 'z-10' : ''" @mouseover="showDots = true" @mouseleave="showDots = false">
       <div class="flex items-center truncate">
             <p class="h-10 w-8.5 flex items-center justify-center rounded bg-light-gray dark:bg-neutral-bg-3 flex-shrink-0 duration-1000 transition-colors ease-linear" v-html="`&#${list.emoji};`"></p>
             <p class="text-base-xs font-medium ml-3 truncate">
@@ -9,7 +9,7 @@
       <div class="flex items-center pl-2">
           <div class="transition-none block relative" :class="dotClasses" @click.prevent="showDotsMenu = !showDotsMenu">
               <button class="hover:text-light-green border-b-2 flex items-center h-full" :class="showDotsMenu ? 'highlighted' : 'border-transparent'">
-                  <svg class="fill-current" height="24" role="img" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 10.5H3.5V13.5H6.5V10.5Z"></path><path d="M13.5 10.5H10.5V13.5H13.5V10.5Z"></path><path d="M17.5 10.5H20.5V13.5H17.5V10.5Z"></path></svg>
+                  <svg class="fill-current stroke-current" height="24" role="img" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 10.5H3.5V13.5H6.5V10.5Z"></path><path d="M13.5 10.5H10.5V13.5H13.5V10.5Z"></path><path d="M17.5 10.5H20.5V13.5H17.5V10.5Z"></path></svg>
               </button>
               <div v-show="showDotsMenu" class="cursor-default absolute top-full right-0 transform translate-x-5 w-44 py-3 bg-white shadow-input rounded dark:bg-dark-bg-gray dark:shadow-list-menu">
                   <button @click="prepareToEdit"  class="flex items-center w-full font-bold text-base-xs hover:text-light-green px-4 py-3 text-black">
@@ -28,7 +28,7 @@
       </div>
   </div>
     <div v-show="isOpen">
-        <SingleStockSidebar v-for="stock in list.stocks" :stock="stock" :key="stock" />
+        <SingleStockSidebar v-for="stock in list.stocks" :stock="stock" :key="stock" :isOpen="isOpen" />
     </div>
 </template>
 

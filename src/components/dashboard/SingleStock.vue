@@ -1,32 +1,82 @@
 <template>
-  <div class="dark:text-white duration-1000 transition-colors ease-linear overflow-hidden">
-    <h1 v-if="companyInfo" class="text-2.5xl ">{{ companyInfo.companyName }}</h1>
+  <div
+    class="dark:text-white duration-1000 transition-colors ease-linear overflow-hidden"
+  >
+    <h1 v-if="companyInfo" class="text-2.5xl">
+      {{ companyInfo?.name }}
+    </h1>
     <h1 v-else class="text-2.5xl shimmer w-80">&nbsp;</h1>
-    <p v-if="priceToDisplay" class="text-2.5xl font-medium mt-1.5 overflow-hidden relative">
+    <p
+      v-if="priceToDisplay"
+      class="text-2.5xl font-medium mt-1.5 overflow-hidden relative"
+    >
       <span class="inline-flex self-center">$</span
       ><transition-group name="slide-out"
-        ><span class="inline-flex self-center overflow-hidden" v-for="(char, index) in priceToDisplay.toFixed(2).split('')" :key="`${char}_${index}`">{{ char }}</span></transition-group
+        ><span
+          class="inline-flex self-center overflow-hidden"
+          v-for="(char, index) in priceToDisplay.toFixed(2).split('')"
+          :key="`${char}_${index}`"
+          >{{ char }}</span
+        ></transition-group
       >
     </p>
     <p v-else class="text-2.5xl shimmer w-40 font-medium mt-1">&nbsp;</p>
-    <p class="mt-1 text-base-xs font-semibold" v-html="priceChange" :class="latestPrice && previousClose ? '' : 'shimmer w-16'"></p>
+    <p
+      class="mt-1 text-base-xs font-semibold"
+      v-html="priceChange"
+      :class="latestPrice && previousClose ? '' : 'shimmer w-16'"
+    ></p>
   </div>
   <div class="relative mt-10 h-49">
-    <svg :width="chartWidth" :height="chartHeight" v-if="intradayPrices.length && linePath" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
+    <svg
+      :width="chartWidth"
+      :height="chartHeight"
+      v-if="intradayPrices.length && linePath"
+      @mousemove="handleMouseMove"
+      @mouseleave="handleMouseLeave"
+    >
       <g>
         <g v-if="previousCloseY !== null">
-          <line x1="0" :x2="chartWidth + 1" :y1="previousCloseY" :y2="previousCloseY" :stroke-dasharray="`1, ${xScale(xValue(intradayPrices[1])) - xScale(xValue(intradayPrices[0])) - 1}`" />
+          <line
+            x1="0"
+            :x2="chartWidth + 1"
+            :y1="previousCloseY"
+            :y2="previousCloseY"
+            :stroke-dasharray="`1, ${
+              xScale(xValue(intradayPrices[1])) -
+              xScale(xValue(intradayPrices[0])) -
+              1
+            }`"
+          />
         </g>
         <g>
-          <path :d="linePath" fill="none" stroke-width="2" :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" />
+          <path
+            :d="linePath"
+            fill="none"
+            stroke-width="2"
+            :stroke="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'"
+          />
         </g>
-        <g v-if="activeIndex !== null" :transform="`translate(${xScale(xValue(intradayPrices[activeIndex]))}, 0)`">
-          <text text-anchor="middle" y="-20" class="active-time text-base-xs">{{ intradayPrices[activeIndex].label }}</text>
+        <g
+          v-if="activeIndex !== null"
+          :transform="`translate(${xScale(
+            xValue(intradayPrices[activeIndex])
+          )}, 0)`"
+        >
+          <text text-anchor="middle" y="-20" class="active-time text-base-xs">
+            {{ intradayPrices[activeIndex].label }}
+          </text>
           <line stroke="2" x1="0" x2="0" y1="0" :y2="chartHeight" />
         </g>
         <g>
           <template :key="index" v-for="(item, index) in intradayPrices">
-            <circle v-show="index === activeIndex" :fill="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'" :cx="xScale(xValue(item))" :cy="yScale(yValue(item))" r="5" />
+            <circle
+              v-show="index === activeIndex"
+              :fill="differenceSign > -1 ? 'rgb(0, 200, 5)' : 'rgb(255, 80, 0)'"
+              :cx="xScale(xValue(item))"
+              :cy="yScale(yValue(item))"
+              r="5"
+            />
           </template>
         </g>
       </g>
@@ -34,82 +84,181 @@
     <p v-if="dataUnavailable">Price data not available</p>
   </div>
   <div class="mt-10 flex items-center border-b border-neutral-bg-3 box-content">
-    <button class="text-base-xs font-bold pb-3 border-b-2 flex justify-center mr-3 translate-y-0.5 transform" :class="differenceSign > -1 ? ' border-light-green' : 'border-red'" disabled><span class="inline-block" :class="differenceSign > -1 ? 'text-light-green' : 'text-red'">1D</span></button>
-    <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1W</span></button>
-    <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1M</span></button>
-    <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">1Y</span></button>
-    <button class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform" disabled><span class="inline-block dark:text-white" :class="differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'">5Y</span></button>
+    <button
+      class="text-base-xs font-bold pb-3 border-b-2 flex justify-center mr-3 translate-y-0.5 transform"
+      :class="differenceSign > -1 ? ' border-light-green' : 'border-red'"
+      disabled
+    >
+      <span
+        class="inline-block"
+        :class="differenceSign > -1 ? 'text-light-green' : 'text-red'"
+        >1D</span
+      >
+    </button>
+    <button
+      class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform"
+      disabled
+    >
+      <span
+        class="inline-block dark:text-white"
+        :class="
+          differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'
+        "
+        >1W</span
+      >
+    </button>
+    <button
+      class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform"
+      disabled
+    >
+      <span
+        class="inline-block dark:text-white"
+        :class="
+          differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'
+        "
+        >1M</span
+      >
+    </button>
+    <button
+      class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform"
+      disabled
+    >
+      <span
+        class="inline-block dark:text-white"
+        :class="
+          differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'
+        "
+        >1Y</span
+      >
+    </button>
+    <button
+      class="text-base-xs font-bold pb-3 flex justify-center mx-3 border-b-2 border-transparent translate-y-0.5 transform"
+      disabled
+    >
+      <span
+        class="inline-block dark:text-white"
+        :class="
+          differenceSign > -1 ? 'hover:text-light-green' : 'hover:text-red'
+        "
+        >5Y</span
+      >
+    </button>
   </div>
   <section class="mt-12 dark:text-white">
     <div v-if="companyInfo">
-      <h2 class="font-medium text-2xl pb-4 border-b border-neutral-bg-3 duration-1000 ease-linear transition-colors">About</h2>
-      <p class="mt-6 text-base-sm duration-1000 ease-linear transition-colors;">{{ companyInfo.description || "Description Not Found" }}</p>
+      <h2
+        class="font-medium text-2xl pb-4 border-b border-neutral-bg-3 duration-1000 ease-linear transition-colors"
+      >
+        About
+      </h2>
+      <p class="mt-6 text-base-sm duration-1000 ease-linear transition-colors;">
+        {{ companyInfo?.description || 'Description Not Found' }}
+      </p>
       <div class="mt-4 flex justify-between">
         <div class="text-base-xs">
           <p class="font-bold">CEO</p>
-          <p>{{ companyInfo.CEO || "Not Found" }}</p>
+          <p>{{ companyInfo?.CEO || 'Not Found' }}</p>
         </div>
         <div class="text-base-xs">
           <p class="font-bold">Employees</p>
-          <p>{{ companyInfo.employees ? parseInt(companyInfo.employees).toLocaleString() : "Not Found" }}</p>
+          <p>
+            {{
+              companyInfo?.total_employees
+                ? parseInt(companyInfo.total_employees).toLocaleString()
+                : 'Not Found'
+            }}
+          </p>
         </div>
         <div class="text-base-xs">
           <p class="font-bold">Location</p>
-          <p>{{ companyInfo.city && companyInfo.state ? `${companyInfo.city}, ${companyInfo.state}` : "Not Found" }}</p>
+          <p>
+            {{
+              companyInfo?.address?.city && companyInfo?.address?.state
+                ? `${companyInfo?.address?.city
+                    .toLowerCase()
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}, ${companyInfo?.address?.state}`
+                : 'Not Found'
+            }}
+          </p>
         </div>
         <div class="text-base-xs">
           <p class="font-bold">Industry</p>
-          <p>{{ companyInfo.industry || "Not Found" }}</p>
+          <p>{{ companyInfo?.finnhubIndustry || 'Not Found' }}</p>
         </div>
       </div>
     </div>
     <div v-else class="shimmer h-64"></div>
   </section>
   <section class="mt-14 dark:text-white">
-    <h2 class="font-medium text-2xl transition-colors ease-linear duration-1000 pb-4 border-b border-neutral-bg-3">News</h2>
+    <h2
+      class="font-medium text-2xl transition-colors ease-linear duration-1000 pb-4 border-b border-neutral-bg-3"
+    >
+      News
+    </h2>
     <div v-if="news.length">
-      <article v-for="article in news" class="first:mt-0 transition-colors ease-linear duration-1000">
-        <a class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded transition-colors duration-200 ease-linear gap-x-16" :href="article.url" rel="noopener" target="_blank">
+      <article
+        v-for="article in news"
+        class="first:mt-1 transition-colors ease-linear duration-1000"
+      >
+        <a
+          class="p-7 flex hover:bg-light-gray dark:hover:bg-dark-bg-gray -mx-6 rounded transition-colors duration-200 ease-linear gap-x-16"
+          :href="article.article_url"
+          rel="noopener"
+          target="_blank"
+        >
           <div class="w-2/3">
             <div class="flex text-base-xs">
-              <p class="font-bold">{{ article.source }}</p>
-              <p class="text-neutral-fg-2 dark:text-neutral-fg-2 pl-1.5">{{ getTimeFromNow(article.datetime) }}</p>
+              <p class="font-bold">{{ article.publisher.name }}</p>
+              <p class="text-neutral-fg-2 dark:text-neutral-fg-2 pl-1.5">
+                {{ getTimeFromNow(article.published_utc) }}
+              </p>
             </div>
-            <h3 class="font-bold text-base-sm leading-tight">{{ article.headline }}</h3>
-            <p class="text-neutral-fg-2 dark:text-neutral-fg-2 text-base-xs truncate">{{ article.summary }}</p>
+            <h3 class="font-bold text-base-sm leading-tight">
+              {{ article.title }}
+            </h3>
+            <p
+              class="text-neutral-fg-2 dark:text-neutral-fg-2 text-base-xs truncate"
+            >
+              {{ article.description }}
+            </p>
           </div>
           <div class="flex-grow">
             <div class="aspect-w-4 aspect-h-3">
-              <img class="object-cover object-center h-full w-full" loading="lazy" :src="article.image" :alt="article.headline" />
+              <img
+                class="object-cover object-center h-full w-full"
+                loading="lazy"
+                :src="article.image_url"
+                :alt="article.title"
+              />
             </div>
           </div>
         </a>
       </article>
     </div>
-    <div v-else class="mt-7">
-      Not found
-    </div>
+    <div v-else class="mt-7">Not found</div>
   </section>
 </template>
 
 <script>
-import { ref, computed } from "vue"
-import { projectFunctions } from "@/firebase/config"
-import { useStore } from "vuex"
-import date from "date-and-time"
-const convertTime = require("convert-time")
-import { line, scaleTime, scaleLinear, extent, scan } from "d3"
+import { ref, computed } from 'vue'
+import { projectFunctions } from '@/firebase/config'
+import { useStore } from 'vuex'
+import date from 'date-and-time'
+import { line, scaleTime, scaleLinear, extent, scan } from 'd3'
+import { getIntradayDummyData } from '../../composables/getIntradayDummyData'
 
 export default {
-  name: "SingleStock",
-  props: ["symbol"],
+  name: 'SingleStock',
+  props: ['symbol'],
   setup(props) {
-    const getStock = projectFunctions.httpsCallable("getStock")
+    const getStock = projectFunctions.httpsCallable('getStock')
 
     const latestPrice = ref(null)
     const previousClose = ref(null)
     const intradayPrices = ref([])
-    const news = ref(["placeholder"])
+    const news = ref([])
     const companyInfo = ref(null)
     const differenceSign = ref(null)
     const state = useStore()
@@ -125,10 +274,16 @@ export default {
     const activeIndex = ref(null)
     const priceToDisplay = ref(null)
     const previousCloseY = ref(null)
+    const symbol = computed(() => props.symbol.toUpperCase())
 
     const handleMouseMove = e => {
       let hoveredDate = xScale.value.invert(e.offsetX)
-      const closestIndex = scan(intradayPrices.value, (a, b) => getDistanceFromHoveredDate(a, hoveredDate) - getDistanceFromHoveredDate(b, hoveredDate))
+      const closestIndex = scan(
+        intradayPrices.value,
+        (a, b) =>
+          getDistanceFromHoveredDate(a, hoveredDate) -
+          getDistanceFromHoveredDate(b, hoveredDate)
+      )
 
       activeIndex.value = closestIndex
       priceToDisplay.value = intradayPrices.value[activeIndex.value].average
@@ -140,13 +295,17 @@ export default {
       priceToDisplay.value = latestPrice.value
     }
 
-    const getDistanceFromHoveredDate = (d, hoveredDate) => Math.abs(xValue(d).getTime() - hoveredDate.getTime())
+    const getDistanceFromHoveredDate = (d, hoveredDate) =>
+      Math.abs(xValue(d).getTime() - hoveredDate.getTime())
 
     const initializeChart = () => {
       todaysDate.value = intradayPrices.value[0].date
 
       xScale.value = scaleTime()
-        .domain([new Date(`${todaysDate.value}T09:30:00`), new Date(`${todaysDate.value}T16:00:00`)])
+        .domain([
+          new Date(`${todaysDate.value}T09:30:00`),
+          new Date(`${todaysDate.value}T16:00:00`)
+        ])
         .range([0, chartWidth])
 
       yScale.value = scaleLinear()
@@ -167,16 +326,25 @@ export default {
     }
 
     const priceChange = computed(() => {
-      if (latestPrice.value && previousClose.value && intradayPrices.value.length) {
-        let price = activeIndex.value !== null ? intradayPrices.value[activeIndex.value].average : latestPrice.value
+      if (
+        latestPrice.value &&
+        previousClose.value &&
+        intradayPrices.value.length
+      ) {
+        let price =
+          activeIndex.value !== null
+            ? intradayPrices.value[activeIndex.value].average
+            : latestPrice.value
 
         let diff = parseFloat(price) - parseFloat(previousClose.value)
-        let sign = Math.sign(diff) > -1 ? "+" : "-"
+        let sign = Math.sign(diff) > -1 ? '+' : '-'
         diff = Math.abs(diff).toFixed(2)
-        let percent = parseFloat(Math.abs((diff / previousClose.value) * 100)).toFixed(2)
-        return sign + "$" + diff + " (" + sign + percent + "%)"
+        let percent = parseFloat(
+          Math.abs((diff / previousClose.value) * 100)
+        ).toFixed(2)
+        return sign + '$' + diff + ' (' + sign + percent + '%)'
       } else {
-        return "&nbsp;"
+        return '&nbsp;'
       }
     })
 
@@ -184,37 +352,72 @@ export default {
       const now = new Date()
       time = new Date(time)
       let timeFromNow = date.subtract(now, time).toHours()
-      let unit = "h"
+      let unit = 'h'
 
       if (timeFromNow < 1) {
         timeFromNow = date.subtract(now, time).toMinutes()
-        unit = "m"
+        unit = 'm'
       } else if (timeFromNow >= 24) {
         timeFromNow = date.subtract(now, time).toDays()
-        unit = "d"
+        unit = 'd'
       }
       return Math.floor(timeFromNow) + unit
     }
 
     const getCompanyInfo = async () => {
-      let result = await getStock(`stock/${props.symbol}/company`)
-      companyInfo.value = JSON.parse(result.data)
+      let result = await getStock({
+        provider: 'polygon',
+        endpoint: `v3/reference/tickers/${symbol.value}`
+      })
+      if (result.data.status && result.data.status === 'ERROR') {
+        state.commit('updateNotificationType', 'error')
+        state.commit(
+          'setNotificationMessage',
+          result.data.error || 'Polygon API error'
+        )
+        state.commit('showNotification')
+        companyInfo.value = { name: props.symbol.toUpperCase() }
+        console.log(companyInfo.value)
+        return
+      }
+      companyInfo.value = result.data.results
     }
 
     const getQuote = async () => {
-      let result = await getStock(`stock/${props.symbol}/quote`)
-      let data = JSON.parse(result.data)
-      latestPrice.value = data.latestPrice
-      priceToDisplay.value = data.latestPrice
-      previousClose.value = data.previousClose
-      console.log(latestPrice.value)
-      console.log(previousClose.value)
-      differenceSign.value = Math.sign(parseFloat(latestPrice.value) - parseFloat(previousClose.value))
-      console.log(differenceSign.value)
+      let result = await getStock({
+        provider: `finnhub`,
+        endpoint: `quote?symbol=${symbol.value}`
+      })
+      let data = result.data
+
+      // Map Finnhub fields
+      latestPrice.value = data.c
+      priceToDisplay.value = data.c
+      previousClose.value = data.pc
+
+      differenceSign.value = Math.sign(
+        parseFloat(latestPrice.value) - parseFloat(previousClose.value)
+      )
     }
 
+    // dummy data for intraday prices
+    const getIntradayDummyPrices = async () => {
+      try {
+        intradayPrices.value = await getIntradayDummyData(
+          latestPrice.value,
+          previousClose.value
+        )
+
+        initializeChart()
+      } catch (err) {
+        intradayPrices.value = []
+        dataUnavailable.value = true
+      }
+    }
+
+    // old IEX API
     const getIntradayPrices = async () => {
-      let result = await getStock(`stock/${props.symbol}/intraday-prices`)
+      let result = await getStock(`stock/${symbol.value}/intraday-prices`)
       try {
         intradayPrices.value = JSON.parse(result.data)
         if (intradayPrices.value[0].average !== null) {
@@ -249,23 +452,60 @@ export default {
     }
 
     const getNews = async () => {
-      let result = await getStock(`stock/${props.symbol}/news/last/3`)
-      news.value = JSON.parse(result.data)
+      return
+      let result = await getStock({
+        provider: 'polygon',
+        endpoint: `v2/reference/news?limit=3&ticker=${symbol.value}`
+      })
+      if (result.data.status && result.data.status === 'ERROR') {
+        state.commit('updateNotificationType', 'error')
+        state.commit(
+          'setNotificationMessage',
+          result.data.error || 'Polygon API error'
+        )
+        state.commit('showNotification')
+        news.value = []
+        return
+      }
+      news.value = result.data.results
     }
 
     const getAllInfo = async () => {
-      await Promise.all([getCompanyInfo(), getNews(), getIntradayPrices()])
+      // await Promise.all([getCompanyInfo(), getNews(), getIntradayPrices()])
+      await Promise.all([getCompanyInfo(), getNews(), getIntradayDummyPrices()])
     }
 
     const start = async () => {
-      state.commit("setActiveStock", props.symbol)
+      state.commit('setActiveStock', props.symbol)
       await getQuote()
       getAllInfo()
     }
 
     start()
 
-    return { latestPrice, intradayPrices, companyInfo, previousClose, priceChange, differenceSign, news, getTimeFromNow, chartWidth, chartHeight, linePath, dataUnavailable, xScale, xValue, yScale, yValue, activeIndex, handleMouseMove, handleMouseLeave, priceToDisplay, previousCloseY }
+    return {
+      latestPrice,
+      intradayPrices,
+      companyInfo,
+      previousClose,
+      priceChange,
+      differenceSign,
+      news,
+      getTimeFromNow,
+      chartWidth,
+      chartHeight,
+      linePath,
+      dataUnavailable,
+      xScale,
+      xValue,
+      yScale,
+      yValue,
+      activeIndex,
+      handleMouseMove,
+      handleMouseLeave,
+      priceToDisplay,
+      previousCloseY
+    }
   }
 }
 </script>

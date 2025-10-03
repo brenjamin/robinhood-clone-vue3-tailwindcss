@@ -5,16 +5,17 @@ import store from './store'
 import './index.css'
 import { projectAuth } from './firebase/config'
 
-
-
-
-let app;
-
+let app
 
 projectAuth.onAuthStateChanged(() => {
-    if (!app) {
-        store.commit('setUser', projectAuth.currentUser)
-        app = createApp(App).use(router).use(store).mount('#app')
-    }
+  if (!app) {
+    store.commit('setUser', projectAuth.currentUser)
+    app = createApp(App).use(router).use(store).mount('#app')
+  }
 })
 
+// Set page title globally
+document.title = 'Robinhood UI Demo'
+router.afterEach(() => {
+  document.title = 'Robinhood UI Demo'
+})

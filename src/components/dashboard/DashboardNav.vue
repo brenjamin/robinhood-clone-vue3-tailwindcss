@@ -83,7 +83,7 @@
                   <router-link
                     :to="{
                       name: 'SingleStock',
-                      params: { symbol: stock.symbol }
+                      params: { symbol: stock.displaySymbol }
                     }"
                     class="text-base-xs"
                   >
@@ -194,7 +194,6 @@ export default {
             let results = result.result
             if (results.length) {
               searchResults.value = results
-              console.log(searchResults.value)
               let matchThis = new RegExp(searchTerm.value, 'gi')
               searchResults.value = searchResults.value.map(item => {
                 item.symbol = item.symbol.replace(
